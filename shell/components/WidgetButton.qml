@@ -1,37 +1,37 @@
 import QtQuick
 
+// Same public API as v2. Existing popup signals remain unchanged.
 Rectangle {
     id: root
     required property var theme
     property string label: ""
     property bool selected: false
+    property int paddingX: 10
     signal activated()
+    readonly property bool hovered: hit.containsMouse
 
-    readonly property bool hovered: mouse.containsMouse
-    implicitWidth: buttonText.implicitWidth + 19
+    implicitWidth: caption.implicitWidth + paddingX * 2
     implicitHeight: 32
-    radius: 2
-    color: selected || hovered ? theme.colors.surface : "#161515"
-    border.width: 1
-    border.color: selected || hovered ? theme.colors.accent : theme.colors.border
-
-    Rectangle {
-        anchors { left: parent.left; right: parent.right; top: parent.top; margins: 2 }
-        height: 1
-        color: root.theme.colors.accent
-        opacity: root.selected ? 0.45 : (root.hovered ? 0.28 : 0)
-    }
-
+    radius: 1
+    color: root.selected ? root.theme.colors.surface
+          : root.hovered ? Qt.darker(root.theme.colors.surface, 1.25)
+          : Qt.darker(root.theme.colors.background, 1.35)
+    border.width: root.selected ? 2 : 1
+    border.color: root.selected || root.hovered
+                ? root.theme.colors.accent : root.theme.colors.border
+    Behavior on border.color { ColorAnimation { duration: 120 } }
     Text {
-        id: buttonText
+        id: caption
         anchors.centerIn: parent
         text: root.label
+        color: root.theme.colors.text
         font.family: "JetBrains Mono"
         font.pixelSize: 11
-        color: root.theme.colors.text
+        font.bold: root.selected
+        renderType: Text.QtRendering
     }
     MouseArea {
-        id: mouse
+        id: hit
         anchors.fill: parent
         hoverEnabled: true
         cursorShape: Qt.PointingHandCursor

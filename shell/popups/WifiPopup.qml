@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Networking
+import "../components/chrome"
 
 PopupWindow {
     id: root
@@ -12,8 +13,8 @@ PopupWindow {
     property var selectedNetwork: null
     property string errorText: ""
 
-    implicitWidth: 360
-    implicitHeight: 430
+    implicitWidth: 420
+    implicitHeight: 500
 
     color: "transparent"
     grabFocus: true
@@ -139,8 +140,16 @@ PopupWindow {
 
     Rectangle {
         anchors.fill: parent
+        // Seamless understated pixel grain (passive; behind interactive content).
+        Image {
+            anchors.fill: parent
+            source: "../assets/stone-grain.png"
+            fillMode: Image.Tile
+            opacity: 0.12
+            smooth: false
+        }
 
-        radius: 9
+        radius: 1
 
         color: root.theme.colors.background
 
@@ -170,6 +179,9 @@ PopupWindow {
 
 
         Rectangle {
+            // Amber pixel-switch: theme-aware, square frame.
+            border.width: 1
+            border.color: root.networkService.wifiEnabled ? root.theme.colors.accent : root.theme.colors.border
             anchors {
                 right: parent.right
                 verticalCenter: title.verticalCenter
@@ -180,11 +192,11 @@ PopupWindow {
             width: 44
             height: 24
 
-            radius: 12
+            radius: 2
 
             color:
                 root.networkService.wifiEnabled
-                    ? "#8cc6df"
+                    ? root.theme.colors.accent
                     : root.theme.colors.surface
 
 
@@ -199,7 +211,7 @@ PopupWindow {
                 width: 18
                 height: 18
 
-                radius: 9
+                radius: 1
 
                 anchors.verticalCenter:
                     parent.verticalCenter
@@ -211,7 +223,7 @@ PopupWindow {
 
                 color:
                     root.networkService.wifiEnabled
-                        ? "#181a1c"
+                        ? root.theme.colors.background
                         : root.theme.colors.muted
 
 
@@ -239,6 +251,17 @@ PopupWindow {
         Rectangle {
             id: currentNetworkCard
 
+            // Passive pixel corner frame, follows Theme Bank instantly.
+            PixelBorder {
+                anchors.fill: parent
+                z: 10
+                innerLine: false
+                opacity: 0.62
+                visible: root.networkService.wifiConnected
+                accent: root.theme.colors.accent
+                secondary: root.theme.colors.border
+            }
+
             anchors {
                 top: title.bottom
                 left: parent.left
@@ -251,18 +274,18 @@ PopupWindow {
 
             height: 58
 
-            radius: 7
+            radius: 1
 
             color:
                 root.networkService.wifiConnected
-                    ? "#354157"
+                    ? root.theme.colors.surface
                     : root.theme.colors.surface
 
             border.width: 1
 
             border.color:
                 root.networkService.wifiConnected
-                    ? "#6dcae8"
+                    ? root.theme.colors.accent
                     : root.theme.colors.surface
 
 
@@ -308,7 +331,7 @@ PopupWindow {
 
                 color:
                     root.networkService.wifiConnected
-                        ? "#6dcae8"
+                        ? root.theme.colors.accent
                         : root.theme.colors.muted
 
                 font.family: "JetBrains Mono"
@@ -338,7 +361,7 @@ PopupWindow {
                         ) + "%"
                         : ""
 
-                color: "#8cc6df"
+                color: root.theme.colors.accent
 
                 font.family: "JetBrains Mono"
                 font.pixelSize: 11
@@ -395,26 +418,35 @@ PopupWindow {
             delegate: Rectangle {
                 id: networkRow
 
+                // Only the connected row gets an ornamental pixel outline.
+                PixelBorder {
+                    anchors.fill: parent
+                    z: 8
+                    innerLine: false
+                    opacity: 0.55
+                    visible: modelData.connected
+                    accent: root.theme.colors.accent
+                    secondary: root.theme.colors.border
+                }
+
                 required property var modelData
 
                 width: ListView.view.width
                 height: 49
 
-                radius: 6
+                radius: 1
 
                 color:
                     modelData.connected
-                        ? "#354157"
+                        ? root.theme.colors.surface
                         : networkMouse.containsMouse
                             ? root.theme.colors.surface
                             : "transparent"
 
                 border.width:
-                    modelData.connected
-                        ? 1
-                        : 0
+                    modelData.connected || networkMouse.containsMouse ? 1 : 0
 
-                border.color: "#6dcae8"
+                border.color: root.theme.colors.accent
 
 
                 Text {
@@ -438,7 +470,7 @@ PopupWindow {
                     color:
                         modelData.connected
                             ? root.theme.colors.text
-                            : "#c8cad0"
+                            : root.theme.colors.text
 
                     font.family: "JetBrains Mono"
                     font.pixelSize: 11
@@ -469,9 +501,9 @@ PopupWindow {
 
                     color:
                         modelData.connected
-                            ? "#6dcae8"
+                            ? root.theme.colors.accent
                             : modelData.known
-                                ? "#9ed06c"
+                                ? root.theme.colors.accent
                                 : root.theme.colors.muted
 
                     font.family: "JetBrains Mono"
@@ -500,9 +532,9 @@ PopupWindow {
 
                     color:
                         modelData.signalStrength >= 0.65
-                            ? "#9ed06c"
+                            ? root.theme.colors.accent
                             : modelData.signalStrength >= 0.35
-                                ? "#edc763"
+                                ? root.theme.colors.text
                                 : root.theme.colors.accent
 
                     font.family: "JetBrains Mono"
@@ -568,12 +600,12 @@ PopupWindow {
                     ? 98
                     : 0
 
-            radius: 7
+            radius: 2
 
             color: root.theme.colors.surface
 
             border.width: 1
-            border.color: "#423f59"
+            border.color: root.theme.colors.border
 
 
             Text {
@@ -592,7 +624,7 @@ PopupWindow {
                         ? root.selectedNetwork.name
                         : ""
 
-                color: "#bb97ee"
+                color: root.theme.colors.accent
 
                 font.family: "JetBrains Mono"
                 font.pixelSize: 10
@@ -613,9 +645,9 @@ PopupWindow {
 
                 height: 32
 
-                radius: 5
+                radius: 2
 
-                color: "#252630"
+                color: root.theme.colors.background
 
                 border.width: 1
                 border.color: root.theme.colors.border
@@ -638,7 +670,7 @@ PopupWindow {
                         TextInput.Password
 
                     color: root.theme.colors.text
-                    selectionColor: "#6dcae8"
+                    selectionColor: root.theme.colors.accent
 
                     font.family: "JetBrains Mono"
                     font.pixelSize: 11
@@ -652,6 +684,8 @@ PopupWindow {
 
             Rectangle {
                 id: connectButton
+            border.width: 1
+            border.color: root.theme.colors.accent
 
                 anchors {
                     right: parent.right
@@ -664,8 +698,8 @@ PopupWindow {
                 width: 82
                 height: 32
 
-                radius: 5
-                color: "#bb97ee"
+                radius: 2
+                color: root.theme.colors.accent
 
 
                 function connectNow() {
@@ -698,7 +732,7 @@ PopupWindow {
 
                     text: "PŘIPOJIT"
 
-                    color: "#181a1c"
+                    color: root.theme.colors.background
 
                     font.family: "JetBrains Mono"
                     font.pixelSize: 9
@@ -747,6 +781,14 @@ PopupWindow {
                 font.pixelSize: 9
             }
         }
+
+        // Decorative only: never intercepts clicks on controls or network rows.
+        PixelBorder {
+            anchors.fill: parent
+            z: 50
+            accent: root.theme.colors.accent
+            secondary: root.theme.colors.border
+        }
     }
 
 
@@ -759,5 +801,7 @@ PopupWindow {
 
             passwordInput.text = ""
         }
+
+
     }
 }

@@ -1,5 +1,6 @@
 import QtQuick
 import Quickshell
+import "../components/chrome"
 
 PopupWindow {
     id: root
@@ -17,8 +18,16 @@ PopupWindow {
 
     Rectangle {
         anchors.fill: parent
+        // Seamless understated pixel grain (passive; behind interactive content).
+        Image {
+            anchors.fill: parent
+            source: "../assets/stone-grain.png"
+            fillMode: Image.Tile
+            opacity: 0.12
+            smooth: false
+        }
         color: root.theme.colors.background
-        radius: 4
+        radius: 1
         border.width: 1
         border.color: root.theme.colors.border
 
@@ -95,5 +104,13 @@ PopupWindow {
                 }
             }
         }
+        // Decorative only: never intercepts clicks on controls or network rows.
+        PixelBorder {
+            anchors.fill: parent
+            z: 50
+            accent: root.theme.colors.accent
+            secondary: root.theme.colors.border
+        }
+
     }
 }

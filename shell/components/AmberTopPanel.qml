@@ -1,7 +1,9 @@
 import QtQuick
 import Quickshell
 import "../popups"
+import "chrome"
 
+// Amber v3: faithful pixel-fantasy appearance; all service APIs are unchanged.
 Scope {
     id: root
     required property var theme
@@ -17,16 +19,16 @@ Scope {
 
     Variants {
         model: Quickshell.screens
-
         PanelWindow {
             id: window
             required property var modelData
             screen: modelData
             anchors { top: true; left: true; right: true }
-            implicitHeight: 56
-            exclusiveZone: 56
+            implicitHeight: 62
+            exclusiveZone: 62
             color: "transparent"
 
+            readonly property bool compact: width < 1600
             function closePopups() {
                 themePopup.visible = false
                 clockPopup.visible = false
@@ -39,63 +41,25 @@ Scope {
                 mediaPopup.visible = false
             }
             function togglePopup(p) {
-                const shouldOpen = !p.visible
-                closePopups()
-                p.visible = shouldOpen
+                const shouldOpen = !p.visible;
+                closePopups();
+                p.visible = shouldOpen;
             }
 
             SystemClock { id: clock; precision: SystemClock.Minutes }
 
-            Rectangle {
+            PixelSurface {
                 id: frame
                 anchors { fill: parent; margins: 3 }
-                radius: 0
-                color: "#121111"
-                border.width: 1
-                border.color: root.theme.colors.accent
-
-                // A discreet second border, avoiding heavy fantasy ornaments.
-                Rectangle {
-                    anchors { fill: parent; margins: 2 }
-                    color: "transparent"
-                    border.width: 1
-                    border.color: root.theme.colors.border
-                    opacity: 0.7
-                }
-
-                // Four precise, axis-aligned pixel corners. No rotations/overlap.
-                Repeater {
-                    model: 4
-                    delegate: Item {
-                        required property int index
-                        width: 12; height: 12
-                        x: index % 2 === 0 ? 0 : frame.width - width
-                        y: index < 2 ? 0 : frame.height - height
-                        Rectangle {
-                            width: 11; height: 2
-                            x: parent.index % 2 === 0 ? 0 : parent.width - width
-                            y: parent.index < 2 ? 0 : parent.height - height
-                            color: root.theme.colors.accent
-                        }
-                        Rectangle {
-                            width: 2; height: 11
-                            x: parent.index % 2 === 0 ? 0 : parent.width - width
-                            y: parent.index < 2 ? 0 : parent.height - height
-                            color: root.theme.colors.accent
-                        }
-                    }
-                }
+                theme: root.theme
 
                 Row {
                     id: leftRow
                     anchors { left: parent.left; leftMargin: 22; verticalCenter: parent.verticalCenter }
-                    spacing: 9
-                    Text {
+                    spacing: 8
+                    BonfireMark {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "♨"
-                        color: root.theme.colors.accent
-                        font.family: "DejaVu Sans"
-                        font.pixelSize: 23
+                        theme: root.theme
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
@@ -104,11 +68,9 @@ Scope {
                         font.family: "JetBrains Mono"
                         font.pixelSize: 14
                         font.bold: true
+                        font.letterSpacing: 1
                     }
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 1; height: 24; color: root.theme.colors.border
-                    }
+                    PixelDivider { anchors.verticalCenter: parent.verticalCenter; theme: root.theme }
                     Repeater {
                         model: 4
                         delegate: Rectangle {
@@ -116,25 +78,28 @@ Scope {
                             required property int index
                             readonly property int desktop: index + 1
                             readonly property bool active: root.workspaces.current === desktop
-                            width: 34; height: 34; radius: 3
-                            color: active ? root.theme.colors.surface : "#171616"
-                            border.color: active ? root.theme.colors.accent : root.theme.colors.border
+                            width: 34; height: 34; radius: 1
+                            color: active ? root.theme.colors.surface
+                                          : Qt.darker(root.theme.colors.background, 1.35)
                             border.width: active ? 2 : 1
+                            border.color: active ? root.theme.colors.accent : root.theme.colors.border
+                            Behavior on border.color { ColorAnimation { duration: 140 } }
                             Rectangle {
                                 anchors.fill: parent
+                                anchors.margins: 3
                                 color: "transparent"
-                                radius: parent.radius
                                 border.width: desktopItem.active ? 1 : 0
                                 border.color: root.theme.colors.accent
-                                opacity: 0.25
+                                opacity: 0.32
                             }
                             Text {
                                 anchors.centerIn: parent
                                 text: desktopItem.desktop
-                                color: desktopItem.active ? root.theme.colors.accent : root.theme.colors.text
                                 font.family: "JetBrains Mono"
                                 font.pixelSize: 14
                                 font.bold: desktopItem.active
+                                color: desktopItem.active ? root.theme.colors.accent
+                                                          : root.theme.colors.text
                             }
                             MouseArea {
                                 anchors.fill: parent
@@ -143,26 +108,30 @@ Scope {
                             }
                         }
                     }
-                    Rectangle {
+                    PixelDivider {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 1; height: 24; color: root.theme.colors.border
+                        theme: root.theme
+                        visible: mediaButton.visible
                     }
                     Rectangle {
                         id: mediaButton
-                        width: 155; height: 32; radius: 2
-                        color: mediaMouse.containsMouse ? root.theme.colors.surface : "#161515"
+                        visible: !window.compact
+                        width: 167; height: 32; radius: 1
+                        color: mediaMouse.containsMouse ? root.theme.colors.surface
+                              : Qt.darker(root.theme.colors.background, 1.35)
                         border.width: 1
-                        border.color: mediaMouse.containsMouse ? root.theme.colors.accent : root.theme.colors.border
+                        border.color: mediaMouse.containsMouse ? root.theme.colors.accent
+                                                             : root.theme.colors.border
                         Text {
                             anchors.fill: parent
-                            anchors.leftMargin: 8; anchors.rightMargin: 8
+                            anchors.leftMargin: 9; anchors.rightMargin: 9
                             verticalAlignment: Text.AlignVCenter
+                            wrapMode: Text.NoWrap
                             elide: Text.ElideRight
                             maximumLineCount: 1
-                            wrapMode: Text.NoWrap
                             text: root.media.available
-                                ? (root.media.playing ? "♫ " : "Ⅱ ") + root.media.displayText
-                                : "♫ No media"
+                                  ? (root.media.playing ? "♫ " : "Ⅱ ") + root.media.displayText
+                                  : "♫ No media"
                             color: root.theme.colors.text
                             font.family: "JetBrains Mono"
                             font.pixelSize: 11
@@ -177,17 +146,38 @@ Scope {
                     }
                 }
 
-                // Truly screen-centered: not centered between the left and right groups.
+                // Clock is fixed at screen center, independent of the two unequal side groups.
                 Item {
                     id: clockButton
                     anchors.centerIn: parent
-                    width: 230; height: 46
+                    width: 200; height: 48
                     Rectangle {
                         anchors.fill: parent
-                        radius: 2
                         color: clockMouse.containsMouse ? root.theme.colors.surface : "transparent"
                         border.width: clockPopup.visible ? 1 : 0
                         border.color: root.theme.colors.accent
+                        radius: 1
+                    }
+                    Rectangle { width: 1; height: 29; anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; color: root.theme.colors.border }
+                    Rectangle { width: 1; height: 29; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; color: root.theme.colors.border }
+                    Column {
+                        anchors.centerIn: parent
+                        spacing: 0
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: Qt.formatTime(clock.date, "HH:mm")
+                            color: root.theme.colors.text
+                            font.family: "JetBrains Mono"
+                            font.pixelSize: 19
+                            font.bold: true
+                        }
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: Qt.formatDate(clock.date, "ddd, d. MMM yyyy")
+                            color: root.theme.colors.muted
+                            font.family: "JetBrains Mono"
+                            font.pixelSize: 10
+                        }
                     }
                     MouseArea {
                         id: clockMouse
@@ -196,25 +186,6 @@ Scope {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: window.togglePopup(clockPopup)
                     }
-                    Column {
-                        anchors.centerIn: parent
-                        spacing: 0
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: Qt.formatTime(clock.date, "HH:mm")
-                        color: root.theme.colors.text
-                        font.family: "JetBrains Mono"
-                        font.pixelSize: 17
-                        font.bold: true
-                    }
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: Qt.formatDate(clock.date, "ddd, d. MMM yyyy")
-                        color: root.theme.colors.muted
-                        font.family: "JetBrains Mono"
-                        font.pixelSize: 10
-                    }
-                }
                 }
 
                 Row {
@@ -224,37 +195,45 @@ Scope {
                     WidgetButton {
                         id: cpuButton
                         theme: root.theme
-                        label: "CPU " + root.stats.cpuUsage + "%  " +
-                            (root.stats.cpuTemp > 0 ? root.stats.cpuTemp + "°" : "—")
+                        selected: cpuPopup.visible
+                        label: "CPU " + root.stats.cpuUsage + "% " +
+                               (root.stats.cpuTemp > 0 ? root.stats.cpuTemp + "°" : "—")
                         onActivated: window.togglePopup(cpuPopup)
                     }
                     WidgetButton {
                         id: wifiButton
                         theme: root.theme
-                        label: root.network.wifiConnected ? "◉ Wi-Fi" : "○ Wi-Fi"
+                        selected: wifiPopup.visible
+                        label: window.compact ? "◉" : (root.network.wifiConnected ? "◉ Wi-Fi" : "○ Wi-Fi")
                         onActivated: window.togglePopup(wifiPopup)
                     }
                     WidgetButton {
                         id: bluetoothButton
                         theme: root.theme
-                        label: root.bluetooth.enabled ? "ᛒ " + root.bluetooth.connectedCount : "ᛒ —"
+                        selected: bluetoothPopup.visible
+                        label: root.bluetooth.enabled ? "ᛒ" + (window.compact ? "" : " " + root.bluetooth.connectedCount) : "ᛒ —"
                         onActivated: window.togglePopup(bluetoothPopup)
                     }
                     WidgetButton {
                         id: audioButton
                         theme: root.theme
+                        selected: audioPopup.visible
                         label: root.audio.muted ? "♫ MUTE" : "♫ " + (root.audio.available ? root.audio.volume + "%" : "—")
                         onActivated: window.togglePopup(audioPopup)
                     }
                     WidgetButton {
                         id: batteryButton
                         theme: root.theme
-                        label: root.battery.available ? (root.battery.charging ? "⚡ " : "▣ ") + root.battery.percentage + "%" : "▣ —"
+                        selected: batteryPopup.visible
+                        label: root.battery.available
+                               ? (root.battery.charging ? "⚡" : "▣ ") + root.battery.percentage + "%"
+                               : "▣ —"
                         onActivated: window.togglePopup(batteryPopup)
                     }
                     WidgetButton {
                         id: updatesButton
                         theme: root.theme
+                        selected: updatesPopup.visible
                         label: "↑ " + root.updates.totalCount
                         onActivated: window.togglePopup(updatesPopup)
                     }
@@ -264,15 +243,12 @@ Scope {
                         label: root.keyboard.displayLabel
                         onActivated: root.keyboard.nextLayout()
                     }
-                    Rectangle {
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 1; height: 24; color: root.theme.colors.border
-                    }
+                    PixelDivider { anchors.verticalCenter: parent.verticalCenter; theme: root.theme }
                     WidgetButton {
                         id: themeButton
                         theme: root.theme
                         selected: themePopup.visible
-                        label: "◈ " + root.theme.current.name + " ▾"
+                        label: (window.compact ? "" : "◈ ") + root.theme.current.name + " ▾"
                         onActivated: window.togglePopup(themePopup)
                     }
                 }
@@ -285,27 +261,25 @@ Scope {
                     visible: false
                 }
                 ThemeBankPopup { id: themePopup; anchorItem: themeButton; theme: root.theme; visible: false }
-                AudioPopup { theme: root.theme; id: audioPopup; anchorItem: audioButton; audioService: root.audio; visible: false }
-                WifiPopup { theme: root.theme; id: wifiPopup; anchorItem: wifiButton; networkService: root.network; visible: false }
-                BluetoothPopup { theme: root.theme; id: bluetoothPopup; anchorItem: bluetoothButton; bluetoothService: root.bluetooth; visible: false }
-                BatteryPopup { theme: root.theme; id: batteryPopup; anchorItem: batteryButton; batteryService: root.battery; visible: false }
-                UpdatesPopup { theme: root.theme; id: updatesPopup; anchorItem: updatesButton; updateService: root.updates; visible: false }
-                MediaPopup { theme: root.theme; id: mediaPopup; anchorItem: mediaButton; mediaService: root.media; visible: false }
+                AudioPopup { id: audioPopup; theme: root.theme; anchorItem: audioButton; audioService: root.audio; visible: false }
+                WifiPopup { id: wifiPopup; theme: root.theme; anchorItem: wifiButton; networkService: root.network; visible: false }
+                BluetoothPopup { id: bluetoothPopup; theme: root.theme; anchorItem: bluetoothButton; bluetoothService: root.bluetooth; visible: false }
+                BatteryPopup { id: batteryPopup; theme: root.theme; anchorItem: batteryButton; batteryService: root.battery; visible: false }
+                UpdatesPopup { id: updatesPopup; theme: root.theme; anchorItem: updatesButton; updateService: root.updates; visible: false }
+                MediaPopup { id: mediaPopup; theme: root.theme; anchorItem: mediaButton; mediaService: root.media; visible: false }
                 PopupWindow {
                     id: cpuPopup
                     visible: false
-                    implicitWidth: 250; implicitHeight: 110
+                    implicitWidth: 250; implicitHeight: 112
                     color: "transparent"
                     grabFocus: true
                     anchor.item: cpuButton
                     anchor.edges: Edges.Bottom | Edges.Right
                     anchor.gravity: Edges.Bottom | Edges.Left
                     anchor.margins.top: 7
-                    Rectangle {
+                    PixelSurface {
                         anchors.fill: parent
-                        radius: 3
-                        color: root.theme.colors.surface
-                        border.width: 1; border.color: root.theme.colors.accent
+                        theme: root.theme
                         Column {
                             anchors.centerIn: parent
                             spacing: 8

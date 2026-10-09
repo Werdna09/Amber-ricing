@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Bluetooth
+import "../components/chrome"
 
 PopupWindow {
     id: root
@@ -23,8 +24,16 @@ PopupWindow {
 
     Rectangle {
         anchors.fill: parent
+        // Seamless understated pixel grain (passive; behind interactive content).
+        Image {
+            anchors.fill: parent
+            source: "../assets/stone-grain.png"
+            fillMode: Image.Tile
+            opacity: 0.12
+            smooth: false
+        }
 
-        radius: 9
+        radius: 1
 
         color: root.theme.colors.background
 
@@ -54,6 +63,9 @@ PopupWindow {
 
 
         Rectangle {
+            // Amber pixel-switch: theme-aware, square frame.
+            border.width: 1
+            border.color: root.bluetoothService.enabled ? root.theme.colors.accent : root.theme.colors.border
             anchors {
                 right: parent.right
                 verticalCenter:
@@ -65,11 +77,11 @@ PopupWindow {
             width: 44
             height: 24
 
-            radius: 12
+            radius: 2
 
             color:
                 root.bluetoothService.enabled
-                    ? "#93b6d9"
+                    ? root.theme.colors.accent
                     : root.theme.colors.surface
 
 
@@ -84,7 +96,7 @@ PopupWindow {
                 width: 18
                 height: 18
 
-                radius: 9
+                radius: 1
 
                 anchors.verticalCenter:
                     parent.verticalCenter
@@ -96,7 +108,7 @@ PopupWindow {
 
                 color:
                     root.bluetoothService.enabled
-                        ? "#181a1c"
+                        ? root.theme.colors.background
                         : root.theme.colors.muted
 
 
@@ -125,6 +137,17 @@ PopupWindow {
         Rectangle {
             id: statusCard
 
+            // Passive pixel corner frame, follows Theme Bank instantly.
+            PixelBorder {
+                anchors.fill: parent
+                z: 10
+                innerLine: false
+                opacity: 0.62
+                visible: root.bluetoothService.enabled
+                accent: root.theme.colors.accent
+                secondary: root.theme.colors.border
+            }
+
             anchors {
                 top: title.bottom
                 left: parent.left
@@ -137,18 +160,18 @@ PopupWindow {
 
             height: 58
 
-            radius: 7
+            radius: 2
 
             color:
                 root.bluetoothService.enabled
-                    ? "#354157"
+                    ? root.theme.colors.surface
                     : root.theme.colors.surface
 
             border.width: 1
 
             border.color:
                 root.bluetoothService.enabled
-                    ? "#6dcae8"
+                    ? root.theme.colors.accent
                     : root.theme.colors.surface
 
 
@@ -195,7 +218,7 @@ PopupWindow {
 
                 color:
                     root.bluetoothService.connectedCount > 0
-                        ? "#6dcae8"
+                        ? root.theme.colors.accent
                         : root.theme.colors.muted
 
                 font.family: "JetBrains Mono"
@@ -236,12 +259,15 @@ PopupWindow {
 
             width: 82
             height: 26
+            border.width: 1
+            border.color: root.bluetoothService.discovering
+                ? root.theme.colors.accent : root.theme.colors.border
 
-            radius: 5
+            radius: 2
 
             color:
                 root.bluetoothService.discovering
-                    ? "#bb97ee"
+                    ? root.theme.colors.accent
                     : root.theme.colors.surface
 
 
@@ -255,7 +281,7 @@ PopupWindow {
 
                 color:
                     root.bluetoothService.discovering
-                        ? "#181a1c"
+                        ? root.theme.colors.background
                         : root.theme.colors.text
 
                 font.family: "JetBrains Mono"
@@ -308,26 +334,35 @@ PopupWindow {
             delegate: Rectangle {
                 id: deviceRow
 
+                // Only the connected row gets an ornamental pixel outline.
+                PixelBorder {
+                    anchors.fill: parent
+                    z: 8
+                    innerLine: false
+                    opacity: 0.55
+                    visible: modelData.connected
+                    accent: root.theme.colors.accent
+                    secondary: root.theme.colors.border
+                }
+
                 required property var modelData
 
                 width: ListView.view.width
                 height: 58
 
-                radius: 6
+                radius: 1
 
                 color:
                     modelData.connected
-                        ? "#354157"
+                        ? root.theme.colors.surface
                         : deviceMouse.containsMouse
                             ? root.theme.colors.surface
                             : "transparent"
 
                 border.width:
-                    modelData.connected
-                        ? 1
-                        : 0
+                    modelData.connected || modelData.paired || deviceMouse.containsMouse ? 1 : 0
 
-                border.color: "#6dcae8"
+                border.color: root.theme.colors.accent
 
 
                 Text {
@@ -385,9 +420,9 @@ PopupWindow {
 
                     color:
                         modelData.connected
-                            ? "#6dcae8"
+                            ? root.theme.colors.accent
                             : modelData.paired
-                                ? "#9ed06c"
+                                ? root.theme.colors.accent
                                 : root.theme.colors.muted
 
                     font.family: "JetBrains Mono"
@@ -397,6 +432,9 @@ PopupWindow {
 
                 Rectangle {
                     id: actionButton
+                    border.width: 1
+                    border.color: modelData.connected || modelData.paired
+                        ? root.theme.colors.accent : root.theme.colors.border
 
                     anchors {
                         right: parent.right
@@ -409,14 +447,14 @@ PopupWindow {
                     width: 82
                     height: 30
 
-                    radius: 5
+                    radius: 2
 
                     color:
                         modelData.connected
-                            ? "#55393d"
+                            ? root.theme.colors.surface
                             : modelData.paired
-                                ? "#354157"
-                                : "#423f59"
+                                ? root.theme.colors.surface
+                                : root.theme.colors.border
 
 
                     Text {
@@ -435,8 +473,8 @@ PopupWindow {
                             modelData.connected
                                 ? root.theme.colors.accent
                                 : modelData.paired
-                                    ? "#6dcae8"
-                                    : "#bb97ee"
+                                    ? root.theme.colors.accent
+                                    : root.theme.colors.accent
 
                         font.family: "JetBrains Mono"
                         font.pixelSize: 9
@@ -532,6 +570,14 @@ PopupWindow {
             font.family: "JetBrains Mono"
             font.pixelSize: 11
         }
+
+        // Decorative only: never intercepts clicks on controls or network rows.
+        PixelBorder {
+            anchors.fill: parent
+            z: 50
+            accent: root.theme.colors.accent
+            secondary: root.theme.colors.border
+        }
     }
 
 
@@ -547,5 +593,7 @@ PopupWindow {
             root.bluetoothService
                 .stopDiscovery()
         }
+
+
     }
 }
