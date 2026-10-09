@@ -17,17 +17,19 @@ Scope {
 
     Variants {
         model: Quickshell.screens
+
         PanelWindow {
             id: window
             required property var modelData
             screen: modelData
             anchors { top: true; left: true; right: true }
-            implicitHeight: 50
-            exclusiveZone: 50
+            implicitHeight: 56
+            exclusiveZone: 56
             color: "transparent"
 
             function closePopups() {
                 themePopup.visible = false
+                clockPopup.visible = false
                 cpuPopup.visible = false
                 audioPopup.visible = false
                 wifiPopup.visible = false
@@ -37,34 +39,75 @@ Scope {
                 mediaPopup.visible = false
             }
             function togglePopup(p) {
-                let open = !p.visible
+                const shouldOpen = !p.visible
                 closePopups()
-                p.visible = open
+                p.visible = shouldOpen
             }
 
             SystemClock { id: clock; precision: SystemClock.Minutes }
 
             Rectangle {
-                anchors.fill: parent
-                color: root.theme.colors.background
+                id: frame
+                anchors { fill: parent; margins: 3 }
+                radius: 0
+                color: "#121111"
+                border.width: 1
+                border.color: root.theme.colors.accent
+
+                // A discreet second border, avoiding heavy fantasy ornaments.
                 Rectangle {
-                    anchors.bottom: parent.bottom
-                    width: parent.width
-                    height: 1
-                    color: root.theme.colors.border
+                    anchors { fill: parent; margins: 2 }
+                    color: "transparent"
+                    border.width: 1
+                    border.color: root.theme.colors.border
+                    opacity: 0.7
+                }
+
+                // Four precise, axis-aligned pixel corners. No rotations/overlap.
+                Repeater {
+                    model: 4
+                    delegate: Item {
+                        required property int index
+                        width: 12; height: 12
+                        x: index % 2 === 0 ? 0 : frame.width - width
+                        y: index < 2 ? 0 : frame.height - height
+                        Rectangle {
+                            width: 11; height: 2
+                            x: parent.index % 2 === 0 ? 0 : parent.width - width
+                            y: parent.index < 2 ? 0 : parent.height - height
+                            color: root.theme.colors.accent
+                        }
+                        Rectangle {
+                            width: 2; height: 11
+                            x: parent.index % 2 === 0 ? 0 : parent.width - width
+                            y: parent.index < 2 ? 0 : parent.height - height
+                            color: root.theme.colors.accent
+                        }
+                    }
                 }
 
                 Row {
                     id: leftRow
-                    anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
-                    spacing: 7
+                    anchors { left: parent.left; leftMargin: 22; verticalCenter: parent.verticalCenter }
+                    spacing: 9
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "✦ AMBER"
+                        text: "♨"
+                        color: root.theme.colors.accent
+                        font.family: "DejaVu Sans"
+                        font.pixelSize: 23
+                    }
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "AMBER"
                         color: root.theme.colors.accent
                         font.family: "JetBrains Mono"
-                        font.pixelSize: 13
+                        font.pixelSize: 14
                         font.bold: true
+                    }
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 1; height: 24; color: root.theme.colors.border
                     }
                     Repeater {
                         model: 4
@@ -73,15 +116,25 @@ Scope {
                             required property int index
                             readonly property int desktop: index + 1
                             readonly property bool active: root.workspaces.current === desktop
-                            width: 28; height: 28; radius: 3
-                            color: active ? root.theme.colors.accent : root.theme.colors.surface
+                            width: 34; height: 34; radius: 3
+                            color: active ? root.theme.colors.surface : "#171616"
                             border.color: active ? root.theme.colors.accent : root.theme.colors.border
-                            border.width: 1
+                            border.width: active ? 2 : 1
+                            Rectangle {
+                                anchors.fill: parent
+                                color: "transparent"
+                                radius: parent.radius
+                                border.width: desktopItem.active ? 1 : 0
+                                border.color: root.theme.colors.accent
+                                opacity: 0.25
+                            }
                             Text {
                                 anchors.centerIn: parent
                                 text: desktopItem.desktop
-                                color: desktopItem.active ? root.theme.colors.background : root.theme.colors.text
-                                font.family: "JetBrains Mono"; font.pixelSize: 12
+                                color: desktopItem.active ? root.theme.colors.accent : root.theme.colors.text
+                                font.family: "JetBrains Mono"
+                                font.pixelSize: 14
+                                font.bold: desktopItem.active
                             }
                             MouseArea {
                                 anchors.fill: parent
@@ -90,47 +143,89 @@ Scope {
                             }
                         }
                     }
-                    Rectangle { width: 1; height: 22; color: root.theme.colors.border; anchors.verticalCenter: parent.verticalCenter }
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 1; height: 24; color: root.theme.colors.border
+                    }
                     Rectangle {
                         id: mediaButton
-                        width: 155; height: 30; radius: 3
-                        color: root.theme.colors.surface
-                        border.width: 1; border.color: root.theme.colors.border
+                        width: 155; height: 32; radius: 2
+                        color: mediaMouse.containsMouse ? root.theme.colors.surface : "#161515"
+                        border.width: 1
+                        border.color: mediaMouse.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                         Text {
-                            anchors.centerIn: parent
-                            width: parent.width - 12
+                            anchors.fill: parent
+                            anchors.leftMargin: 8; anchors.rightMargin: 8
+                            verticalAlignment: Text.AlignVCenter
                             elide: Text.ElideRight
-                            text: root.media.available ? (root.media.playing ? "♫ " : "Ⅱ ") + root.media.displayText : "♫ No media"
+                            maximumLineCount: 1
+                            wrapMode: Text.NoWrap
+                            text: root.media.available
+                                ? (root.media.playing ? "♫ " : "Ⅱ ") + root.media.displayText
+                                : "♫ No media"
                             color: root.theme.colors.text
-                            font.family: "JetBrains Mono"; font.pixelSize: 11
+                            font.family: "JetBrains Mono"
+                            font.pixelSize: 11
                         }
-                        MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: window.togglePopup(mediaPopup) }
+                        MouseArea {
+                            id: mediaMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: window.togglePopup(mediaPopup)
+                        }
                     }
                 }
-                Column {
+
+                // Truly screen-centered: not centered between the left and right groups.
+                Item {
+                    id: clockButton
                     anchors.centerIn: parent
-                    spacing: 0
+                    width: 230; height: 46
+                    Rectangle {
+                        anchors.fill: parent
+                        radius: 2
+                        color: clockMouse.containsMouse ? root.theme.colors.surface : "transparent"
+                        border.width: clockPopup.visible ? 1 : 0
+                        border.color: root.theme.colors.accent
+                    }
+                    MouseArea {
+                        id: clockMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: window.togglePopup(clockPopup)
+                    }
+                    Column {
+                        anchors.centerIn: parent
+                        spacing: 0
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         text: Qt.formatTime(clock.date, "HH:mm")
-                        color: root.theme.colors.accent
-                        font.family: "JetBrains Mono"; font.pixelSize: 16; font.bold: true
+                        color: root.theme.colors.text
+                        font.family: "JetBrains Mono"
+                        font.pixelSize: 17
+                        font.bold: true
                     }
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
-                        text: Qt.formatDate(clock.date, "ddd d. MMM")
-                        color: root.theme.colors.text
-                        font.family: "JetBrains Mono"; font.pixelSize: 10
+                        text: Qt.formatDate(clock.date, "ddd, d. MMM yyyy")
+                        color: root.theme.colors.muted
+                        font.family: "JetBrains Mono"
+                        font.pixelSize: 10
                     }
                 }
+                }
+
                 Row {
                     id: rightRow
-                    anchors { right: parent.right; rightMargin: 12; verticalCenter: parent.verticalCenter }
+                    anchors { right: parent.right; rightMargin: 20; verticalCenter: parent.verticalCenter }
                     spacing: 5
                     WidgetButton {
                         id: cpuButton
                         theme: root.theme
-                        label: "CPU " + root.stats.cpuUsage + "%"
+                        label: "CPU " + root.stats.cpuUsage + "%  " +
+                            (root.stats.cpuTemp > 0 ? root.stats.cpuTemp + "°" : "—")
                         onActivated: window.togglePopup(cpuPopup)
                     }
                     WidgetButton {
@@ -154,7 +249,7 @@ Scope {
                     WidgetButton {
                         id: batteryButton
                         theme: root.theme
-                        label: root.battery.available ? (root.battery.charging ? "⚡" : "▣ ") + root.battery.percentage + "%" : "▣ —"
+                        label: root.battery.available ? (root.battery.charging ? "⚡ " : "▣ ") + root.battery.percentage + "%" : "▣ —"
                         onActivated: window.togglePopup(batteryPopup)
                     }
                     WidgetButton {
@@ -169,14 +264,26 @@ Scope {
                         label: root.keyboard.displayLabel
                         onActivated: root.keyboard.nextLayout()
                     }
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: 1; height: 24; color: root.theme.colors.border
+                    }
                     WidgetButton {
                         id: themeButton
                         theme: root.theme
-                        label: "✦ " + root.theme.current.name + " ▾"
+                        selected: themePopup.visible
+                        label: "◈ " + root.theme.current.name + " ▾"
                         onActivated: window.togglePopup(themePopup)
                     }
                 }
 
+                CalendarPopup {
+                    id: clockPopup
+                    anchorItem: clockButton
+                    theme: root.theme
+                    clockService: clock
+                    visible: false
+                }
                 ThemeBankPopup { id: themePopup; anchorItem: themeButton; theme: root.theme; visible: false }
                 AudioPopup { theme: root.theme; id: audioPopup; anchorItem: audioButton; audioService: root.audio; visible: false }
                 WifiPopup { theme: root.theme; id: wifiPopup; anchorItem: wifiButton; networkService: root.network; visible: false }
@@ -196,9 +303,9 @@ Scope {
                     anchor.margins.top: 7
                     Rectangle {
                         anchors.fill: parent
-                        radius: 4
+                        radius: 3
                         color: root.theme.colors.surface
-                        border.width: 1; border.color: root.theme.colors.border
+                        border.width: 1; border.color: root.theme.colors.accent
                         Column {
                             anchors.centerIn: parent
                             spacing: 8
