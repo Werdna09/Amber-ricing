@@ -167,7 +167,7 @@ PopupWindow {
     }
 
 
-    readonly property real trackLength: {
+    readonly property real reportedLength: {
         const p = root.player
 
         if (
@@ -191,7 +191,17 @@ PopupWindow {
     }
 
 
+    // AMBER_PHASE_A_V1: preserve last known duration across transient MPRIS metadata gaps.
+    property real rememberedLength: 0
+    readonly property real trackLength: root.reportedLength > 0 ? root.reportedLength : root.rememberedLength
+    onReportedLengthChanged: {
+        if (root.reportedLength > 0) root.rememberedLength = root.reportedLength
+    }
+
+    // Preview drag locally, commit to MPRIS only on release.
     property real currentPosition: 0
+    property bool seekDragging: false
+    property int seekGraceTicks: 0
 
 
     /*
@@ -267,85 +277,38 @@ PopupWindow {
 
 
     function refreshPosition() {
-        const p =
-            root.player
-
-        if (
-            p === null
-            || p === undefined
-            || !p.positionSupported
-        ) {
+        const p = root.player
+        if (root.seekDragging || root.seekGraceTicks > 0) return
+        if (p === null || p === undefined) {
             root.currentPosition = 0
-
             return
         }
-
-
-        const value =
-            Number(p.position)
-
-
-        root.currentPosition =
-            isFinite(value)
-            && value >= 0
-                ? value
-                : 0
+        // Some browser players briefly stop exporting Position after a seek.
+        // Do not erase the last valid location during this transient state.
+        if (!p.positionSupported) return
+        const value = Number(p.position)
+        if (isFinite(value) && value >= 0)
+            root.currentPosition = root.trackLength > 0
+                    ? Math.min(value, root.trackLength) : value
     }
 
-
-    function seekFromMouse(
-        mouseX,
-        trackWidth
-    ) {
-        const p =
-            root.player
-
-
-        if (
-            p === null
-            || p === undefined
-            || !p.canSeek
-            || !p.positionSupported
-            || !p.lengthSupported
-        ) {
+    function seekFromMouse(mouseX, trackWidth, commit) {
+        const p = root.player
+        if (p === null || p === undefined || !p.canSeek ||
+            !p.positionSupported || trackWidth <= 0)
             return
+        const length = root.trackLength
+        if (!isFinite(length) || length <= 0) return
+        const ratio = Math.max(0, Math.min(1, mouseX / trackWidth))
+        const target = length * ratio
+        // Local UI follows mouse at frame rate without spamming MPRIS over D-Bus.
+        root.currentPosition = target
+        if (commit) {
+            root.seekGraceTicks = 3
+            // Quickshell MprisPlayer.position is writable when canSeek is true.
+            p.position = target
         }
-
-
-        const length =
-            Number(p.length)
-
-
-        if (
-            !isFinite(length)
-            || length <= 0
-        ) {
-            return
-        }
-
-
-        const ratio =
-            Math.max(
-                0,
-                Math.min(
-                    1,
-                    mouseX / trackWidth
-                )
-            )
-
-
-        const newPosition =
-            length * ratio
-
-
-        p.position =
-            newPosition
-
-
-        root.currentPosition =
-            newPosition
     }
-
 
     function raisePlayer() {
         const p =
@@ -375,13 +338,36 @@ PopupWindow {
     Timer {
         interval: 1000
         repeat: true
-
-        running:
-            root.visible
-            && root.positionSupported
-
-
+        running: root.visible && root.positionSupported
         onTriggered: {
+            if (root.seekDragging) return
+            if (root.seekGraceTicks > 0) {
+                root.seekGraceTicks -= 1
+                if (root.playing && root.trackLength > 0)
+                    root.currentPosition = Math.min(root.trackLength, root.currentPosition + 1)
+                return
+            }
+            root.refreshPosition()
+        }
+    }
+
+    Connections {
+        target: root.player
+        function onTrackChanged() {
+            root.seekDragging = false
+            root.seekGraceTicks = 0
+            root.rememberedLength = 0
+            root.currentPosition = 0
+            Qt.callLater(root.refreshPosition)
+        }
+        function onPositionChanged() {
+            if (root.seekDragging) return
+            if (root.seekGraceTicks > 0) {
+                if (!root.player || !root.player.positionSupported) return
+                const actual = Number(root.player.position)
+                if (!isFinite(actual) || Math.abs(actual - root.currentPosition) > 4) return
+                root.seekGraceTicks = 0
+            }
             root.refreshPosition()
         }
     }
@@ -791,20 +777,25 @@ PopupWindow {
 
 
                 onPressed: mouse => {
-                    root.seekFromMouse(
-                        mouse.x,
-                        width
-                    )
+                    root.seekDragging = true
+                    root.seekGraceTicks = 0
+                    root.seekFromMouse(mouse.x, width, false)
                 }
 
-
                 onPositionChanged: mouse => {
-                    if (pressed) {
-                        root.seekFromMouse(
-                            mouse.x,
-                            width
-                        )
-                    }
+                    if (pressed)
+                        root.seekFromMouse(mouse.x, width, false)
+                }
+
+                onReleased: mouse => {
+                    root.seekFromMouse(mouse.x, width, true)
+                    root.seekDragging = false
+                }
+
+                onCanceled: {
+                    root.seekDragging = false
+                    root.seekGraceTicks = 0
+                    root.refreshPosition()
                 }
             }
         }
@@ -1168,6 +1159,9 @@ PopupWindow {
      */
 
     onPlayerChanged: {
+        root.seekDragging = false
+        root.seekGraceTicks = 0
+        root.rememberedLength = 0
         root.refreshPosition()
     }
 

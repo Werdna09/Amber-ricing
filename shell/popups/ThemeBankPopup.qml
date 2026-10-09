@@ -63,7 +63,7 @@ PopupWindow {
                             width: group.width
                             height: 42
                             radius: 1
-                            color: root.theme.selectedId === modelData.id ? root.theme.colors.surface : root.theme.colors.background
+                            color: root.theme.colors.background
                             border.width: root.theme.selectedId === modelData.id ? 2 : 1
                             border.color: root.theme.selectedId === modelData.id ? root.theme.colors.accent : root.theme.colors.border
                             SoulsHighlight {

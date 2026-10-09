@@ -456,7 +456,7 @@ PopupWindow {
 
                 radius: 2
 
-                color: updateMouse.containsMouse ? root.theme.colors.surface : "transparent"
+                color: "transparent"
 
                 SoulsHighlight {
                     anchors.fill: parent

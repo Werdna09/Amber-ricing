@@ -436,12 +436,7 @@ PopupWindow {
 
                 radius: 1
 
-                color:
-                    modelData.connected
-                        ? root.theme.colors.surface
-                        : networkMouse.containsMouse
-                            ? root.theme.colors.surface
-                            : "transparent"
+                color: "transparent"
 
                 border.width:
                     modelData.connected || networkMouse.containsMouse ? 1 : 0

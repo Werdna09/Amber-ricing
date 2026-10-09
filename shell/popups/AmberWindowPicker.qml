@@ -90,8 +90,7 @@ PopupWindow {
                 width: ListView.view.width
                 height: 60
                 radius: 1
-                color: mainMouse.containsMouse || closeMouse.containsMouse || modelData.active
-                    ? root.theme.colors.surface : "transparent"
+                color: "transparent"
                 border.width: mainMouse.containsMouse || closeMouse.containsMouse || modelData.active ? 1 : 0
                 border.color: root.theme.colors.accent
 

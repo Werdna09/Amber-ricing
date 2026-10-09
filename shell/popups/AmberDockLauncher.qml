@@ -230,7 +230,7 @@ PopupWindow {
                     readonly property var entry: root.favouriteEntry(modelData.id)
                     width: (quickRow.width - 3 * quickRow.spacing) / 4
                     height: quickRow.height
-                    color: shortcutMouse.containsMouse ? root.theme.colors.surface : "transparent"
+                    color: "transparent"
                     radius: 1
                     border.width: 1
                     border.color: shortcutMouse.containsMouse ? root.theme.colors.accent : root.theme.colors.border
@@ -303,7 +303,7 @@ PopupWindow {
                     width: categoryList.width
                     height: 33
                     radius: 1
-                    color: chosen ? root.theme.colors.surface : "transparent"
+                    color: "transparent"
                     border.width: chosen ? 1 : 0
                     border.color: root.theme.colors.accent
                     SoulsHighlight { anchors.fill: parent; theme: root.theme
@@ -371,7 +371,7 @@ PopupWindow {
                 width: ListView.view.width
                 height: 46
                 radius: 1
-                color: highlighted ? root.theme.colors.surface : "transparent"
+                color: "transparent"
                 border.width: highlighted ? 1 : 0
                 border.color: root.theme.colors.accent
                 SoulsHighlight {
