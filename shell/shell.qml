@@ -16,6 +16,7 @@ ShellRoot {
     UpdateStatus { id: updates }
     MediaStatus { id: media }
     KeyboardStatus { id: keyboard }
+    WindowStatus { id: windows }
 
     AmberTopPanel {
         theme: theme
@@ -28,5 +29,10 @@ ShellRoot {
         updates: updates
         media: media
         keyboard: keyboard
+    }
+    // Amber Dock v1 — independent of the existing top panel.
+    AmberDock {
+        theme: theme
+        windowService: windows
     }
 }
