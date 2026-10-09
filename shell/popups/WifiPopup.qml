@@ -449,6 +449,13 @@ PopupWindow {
                 border.color: root.theme.colors.accent
 
 
+                SoulsHighlight {
+                    anchors.fill: parent
+                    theme: root.theme
+                    selected: networkRow.modelData.connected
+                    hovered: networkMouse.containsMouse
+                }
+
                 Text {
                     anchors {
                         top: parent.top

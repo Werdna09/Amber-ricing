@@ -458,6 +458,11 @@ PopupWindow {
 
                 color: updateMouse.containsMouse ? root.theme.colors.surface : "transparent"
 
+                SoulsHighlight {
+                    anchors.fill: parent
+                    theme: root.theme
+                    hovered: updateMouse.containsMouse
+                }
 
                 Text {
                     anchors {

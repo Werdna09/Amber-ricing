@@ -66,12 +66,11 @@ PopupWindow {
                             color: root.theme.selectedId === modelData.id ? root.theme.colors.surface : root.theme.colors.background
                             border.width: root.theme.selectedId === modelData.id ? 2 : 1
                             border.color: root.theme.selectedId === modelData.id ? root.theme.colors.accent : root.theme.colors.border
-                            // Amber Souls details v1 — selected palette glows softly.
-                            Rectangle {
+                            SoulsHighlight {
                                 anchors.fill: parent
-                                color: root.theme.colors.accent
-                                opacity: root.theme.selectedId === paletteEntry.modelData.id ? 0.10 : 0
-                                radius: 1
+                                theme: root.theme
+                                selected: root.theme.selectedId === paletteEntry.modelData.id
+                                hovered: paletteHover.containsMouse
                             }
                             Row {
                                 anchors.fill: parent
@@ -99,7 +98,9 @@ PopupWindow {
                                 }
                             }
                             MouseArea {
+                                id: paletteHover
                                 anchors.fill: parent
+                                hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: {
                                     root.theme.selectPalette(paletteEntry.modelData.id)

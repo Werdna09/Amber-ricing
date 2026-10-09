@@ -82,7 +82,8 @@ Scope {
                             color: active ? root.theme.colors.surface
                                           : Qt.darker(root.theme.colors.background, 1.35)
                             border.width: active ? 2 : 1
-                            border.color: active ? root.theme.colors.accent : root.theme.colors.border
+                            border.color: active || workspaceMouse.containsMouse
+                                          ? root.theme.colors.accent : root.theme.colors.border
                             Behavior on border.color { ColorAnimation { duration: 140 } }
                             Rectangle {
                                 anchors.fill: parent
@@ -91,6 +92,12 @@ Scope {
                                 border.width: desktopItem.active ? 1 : 0
                                 border.color: root.theme.colors.accent
                                 opacity: 0.32
+                            }
+                            SoulsHighlight {
+                                anchors.fill: parent
+                                theme: root.theme
+                                selected: desktopItem.active
+                                hovered: workspaceMouse.containsMouse
                             }
                             Text {
                                 anchors.centerIn: parent
@@ -102,7 +109,9 @@ Scope {
                                                           : root.theme.colors.text
                             }
                             MouseArea {
+                                id: workspaceMouse
                                 anchors.fill: parent
+                                hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
                                 onClicked: root.workspaces.switchTo(desktopItem.desktop)
                             }
@@ -120,8 +129,14 @@ Scope {
                         color: mediaMouse.containsMouse ? root.theme.colors.surface
                               : Qt.darker(root.theme.colors.background, 1.35)
                         border.width: 1
-                        border.color: mediaMouse.containsMouse ? root.theme.colors.accent
-                                                             : root.theme.colors.border
+                        border.color: mediaPopup.visible || mediaMouse.containsMouse
+                                      ? root.theme.colors.accent : root.theme.colors.border
+                        SoulsHighlight {
+                            anchors.fill: parent
+                            theme: root.theme
+                            hovered: mediaMouse.containsMouse
+                            selected: mediaPopup.visible
+                        }
                         Text {
                             anchors.fill: parent
                             anchors.leftMargin: 9; anchors.rightMargin: 9
@@ -154,12 +169,18 @@ Scope {
                     Rectangle {
                         anchors.fill: parent
                         color: clockMouse.containsMouse ? root.theme.colors.surface : "transparent"
-                        border.width: clockPopup.visible ? 1 : 0
+                        border.width: clockPopup.visible || clockMouse.containsMouse ? 1 : 0
                         border.color: root.theme.colors.accent
                         radius: 1
                     }
                     Rectangle { width: 1; height: 29; anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter; color: root.theme.colors.border }
                     Rectangle { width: 1; height: 29; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; color: root.theme.colors.border }
+                    SoulsHighlight {
+                        anchors.fill: parent
+                        theme: root.theme
+                        hovered: clockMouse.containsMouse
+                        selected: clockPopup.visible
+                    }
                     Column {
                         anchors.centerIn: parent
                         spacing: 0

@@ -1,6 +1,7 @@
 import QtQuick
+import "chrome"
 
-// Same public API as v2. Existing popup signals remain unchanged.
+// API preserved: theme, label, selected, paddingX, activated().
 Rectangle {
     id: root
     required property var theme
@@ -8,18 +9,25 @@ Rectangle {
     property bool selected: false
     property int paddingX: 10
     signal activated()
-    readonly property bool hovered: hit.containsMouse
 
+    readonly property bool hovered: hit.containsMouse
     implicitWidth: caption.implicitWidth + paddingX * 2
     implicitHeight: 32
     radius: 1
     color: root.selected ? root.theme.colors.surface
-          : root.hovered ? Qt.darker(root.theme.colors.surface, 1.25)
           : Qt.darker(root.theme.colors.background, 1.35)
     border.width: root.selected ? 2 : 1
     border.color: root.selected || root.hovered
-                ? root.theme.colors.accent : root.theme.colors.border
-    Behavior on border.color { ColorAnimation { duration: 120 } }
+                  ? root.theme.colors.accent : root.theme.colors.border
+    Behavior on border.color { ColorAnimation { duration: 145 } }
+
+    SoulsHighlight {
+        anchors.fill: parent
+        theme: root.theme
+        hovered: root.hovered
+        selected: root.selected
+    }
+
     Text {
         id: caption
         anchors.centerIn: parent
@@ -30,6 +38,7 @@ Rectangle {
         font.bold: root.selected
         renderType: Text.QtRendering
     }
+
     MouseArea {
         id: hit
         anchors.fill: parent
