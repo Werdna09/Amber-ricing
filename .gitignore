@@ -34,3 +34,6 @@ __pycache__/
 
 # Generated from Theme Bank by Amber Alacritty
 config/alacritty/amber-colors.toml
+
+# Local fish config snapshot; may contain private variables
+config/fish/
