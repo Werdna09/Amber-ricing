@@ -1,0 +1,13 @@
+{
+  "id": "first-flame",
+  "name": "First Flame",
+  "mode": "day",
+  "colors": {
+    "background": "#211A17",
+    "surface": "#352820",
+    "border": "#644A35",
+    "muted": "#AD7650",
+    "accent": "#DAA45C",
+    "text": "#E8D4B2"
+  }
+}

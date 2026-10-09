@@ -1,0 +1,13 @@
+{
+  "id": "dying-ember",
+  "name": "Dying Ember",
+  "mode": "night",
+  "colors": {
+    "background": "#151416",
+    "surface": "#252124",
+    "border": "#493537",
+    "muted": "#77564A",
+    "accent": "#C18A58",
+    "text": "#D8C8B8"
+  }
+}

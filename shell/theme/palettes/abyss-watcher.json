@@ -1,0 +1,13 @@
+{
+  "id": "abyss-watcher",
+  "name": "Abyss Watcher",
+  "mode": "night",
+  "colors": {
+    "background": "#121214",
+    "surface": "#211E23",
+    "border": "#3D3439",
+    "muted": "#75403E",
+    "accent": "#B36C58",
+    "text": "#CFC5C1"
+  }
+}

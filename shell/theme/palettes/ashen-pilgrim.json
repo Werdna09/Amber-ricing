@@ -1,0 +1,13 @@
+{
+  "id": "ashen-pilgrim",
+  "name": "Ashen Pilgrim",
+  "mode": "day",
+  "colors": {
+    "background": "#242225",
+    "surface": "#373235",
+    "border": "#66524E",
+    "muted": "#A67864",
+    "accent": "#D9A279",
+    "text": "#DFD3C7"
+  }
+}

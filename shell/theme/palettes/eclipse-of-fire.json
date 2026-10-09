@@ -1,0 +1,13 @@
+{
+  "id": "eclipse-of-fire",
+  "name": "Eclipse of Fire",
+  "mode": "night",
+  "colors": {
+    "background": "#19161F",
+    "surface": "#2B2634",
+    "border": "#504052",
+    "muted": "#866577",
+    "accent": "#D29A6C",
+    "text": "#E5D3CA"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "moonlit-cathedral",
+  "name": "Moonlit Cathedral",
+  "mode": "night",
+  "colors": {
+    "background": "#171A21",
+    "surface": "#262B35",
+    "border": "#424B5A",
+    "muted": "#7C8998",
+    "accent": "#B3B5A0",
+    "text": "#E0DED4"
+  }
+}

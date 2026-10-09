@@ -1,0 +1,132 @@
+[
+  {
+    "id": "first-flame",
+    "name": "First Flame",
+    "mode": "day",
+    "colors": {
+      "background": "#211A17",
+      "surface": "#352820",
+      "border": "#644A35",
+      "muted": "#AD7650",
+      "accent": "#DAA45C",
+      "text": "#E8D4B2"
+    }
+  },
+  {
+    "id": "anor-londo",
+    "name": "Anor Londo",
+    "mode": "day",
+    "colors": {
+      "background": "#28221C",
+      "surface": "#41372C",
+      "border": "#75614C",
+      "muted": "#B28D62",
+      "accent": "#F0C674",
+      "text": "#F2E0BF"
+    }
+  },
+  {
+    "id": "ashen-pilgrim",
+    "name": "Ashen Pilgrim",
+    "mode": "day",
+    "colors": {
+      "background": "#242225",
+      "surface": "#373235",
+      "border": "#66524E",
+      "muted": "#A67864",
+      "accent": "#D9A279",
+      "text": "#DFD3C7"
+    }
+  },
+  {
+    "id": "moss-ember",
+    "name": "Moss & Ember",
+    "mode": "day",
+    "colors": {
+      "background": "#23241D",
+      "surface": "#34372A",
+      "border": "#596048",
+      "muted": "#927355",
+      "accent": "#D5A263",
+      "text": "#E0D7BB"
+    }
+  },
+  {
+    "id": "crimson-covenant",
+    "name": "Crimson Covenant",
+    "mode": "day",
+    "colors": {
+      "background": "#240F13",
+      "surface": "#3D2023",
+      "border": "#68433D",
+      "muted": "#99715C",
+      "accent": "#D7AA70",
+      "text": "#F1D8C0"
+    }
+  },
+  {
+    "id": "dying-ember",
+    "name": "Dying Ember",
+    "mode": "night",
+    "colors": {
+      "background": "#151416",
+      "surface": "#252124",
+      "border": "#493537",
+      "muted": "#77564A",
+      "accent": "#C18A58",
+      "text": "#D8C8B8"
+    }
+  },
+  {
+    "id": "moonlit-cathedral",
+    "name": "Moonlit Cathedral",
+    "mode": "night",
+    "colors": {
+      "background": "#171A21",
+      "surface": "#262B35",
+      "border": "#424B5A",
+      "muted": "#7C8998",
+      "accent": "#B3B5A0",
+      "text": "#E0DED4"
+    }
+  },
+  {
+    "id": "abyss-watcher",
+    "name": "Abyss Watcher",
+    "mode": "night",
+    "colors": {
+      "background": "#121214",
+      "surface": "#211E23",
+      "border": "#3D3439",
+      "muted": "#75403E",
+      "accent": "#B36C58",
+      "text": "#CFC5C1"
+    }
+  },
+  {
+    "id": "hollow-grove",
+    "name": "Hollow Grove",
+    "mode": "night",
+    "colors": {
+      "background": "#161A18",
+      "surface": "#252D29",
+      "border": "#3E514A",
+      "muted": "#73847A",
+      "accent": "#B69B65",
+      "text": "#D8D9C8"
+    }
+  },
+  {
+    "id": "eclipse-of-fire",
+    "name": "Eclipse of Fire",
+    "mode": "night",
+    "colors": {
+      "background": "#19161F",
+      "surface": "#2B2634",
+      "border": "#504052",
+      "muted": "#866577",
+      "accent": "#D29A6C",
+      "text": "#E5D3CA"
+    }
+  }
+]

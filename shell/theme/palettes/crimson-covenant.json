@@ -1,0 +1,13 @@
+{
+  "id": "crimson-covenant",
+  "name": "Crimson Covenant",
+  "mode": "day",
+  "colors": {
+    "background": "#240F13",
+    "surface": "#3D2023",
+    "border": "#68433D",
+    "muted": "#99715C",
+    "accent": "#D7AA70",
+    "text": "#F1D8C0"
+  }
+}

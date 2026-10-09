@@ -1,0 +1,13 @@
+{
+  "id": "anor-londo",
+  "name": "Anor Londo",
+  "mode": "day",
+  "colors": {
+    "background": "#28221C",
+    "surface": "#41372C",
+    "border": "#75614C",
+    "muted": "#B28D62",
+    "accent": "#F0C674",
+    "text": "#F2E0BF"
+  }
+}

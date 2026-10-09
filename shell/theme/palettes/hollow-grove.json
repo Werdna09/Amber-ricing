@@ -1,0 +1,13 @@
+{
+  "id": "hollow-grove",
+  "name": "Hollow Grove",
+  "mode": "night",
+  "colors": {
+    "background": "#161A18",
+    "surface": "#252D29",
+    "border": "#3E514A",
+    "muted": "#73847A",
+    "accent": "#B69B65",
+    "text": "#D8D9C8"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "moss-ember",
+  "name": "Moss & Ember",
+  "mode": "day",
+  "colors": {
+    "background": "#23241D",
+    "surface": "#34372A",
+    "border": "#596048",
+    "muted": "#927355",
+    "accent": "#D5A263",
+    "text": "#E0D7BB"
+  }
+}
