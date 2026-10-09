@@ -1,6 +1,34 @@
+
+# ==========================================
+# AMBER — Git ignore
+# ==========================================
+
+# Local backups
 backups/
+
+# Local theme selection
+shell/theme/selection.json
+
+# Logs and temporary files
 *.log
 *.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS
 .DS_Store
 
-shell/theme/selection.json
+# Editor
+.vscode/
+.idea/
+
+# Runtime files
+*.pid
+
