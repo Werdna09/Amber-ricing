@@ -132,7 +132,7 @@ PopupWindow {
 
             height: 8
 
-            radius: 4
+            radius: 2
 
             color: root.theme.colors.surface
 
@@ -154,7 +154,7 @@ PopupWindow {
                         )
                     )
 
-                radius: 4
+                radius: 2
 
                 color:
                     root.audioService.muted
@@ -173,7 +173,7 @@ PopupWindow {
                 width: 14
                 height: 14
 
-                radius: 7
+                radius: 2
 
                 anchors.verticalCenter:
                     parent.verticalCenter
@@ -266,10 +266,12 @@ PopupWindow {
 
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width: 70
                 height: 30
 
-                radius: 5
+                radius: 2
                 color: root.theme.colors.surface
 
                 Text {
@@ -296,15 +298,17 @@ PopupWindow {
 
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width: 122
                 height: 30
 
-                radius: 5
+                radius: 2
 
                 color:
                     root.audioService.muted
-                        ? "#55393d"
-                        : "#394634"
+                        ? root.theme.colors.surface
+                        : root.theme.colors.surface
 
                 Text {
                     anchors.centerIn: parent
@@ -336,10 +340,12 @@ PopupWindow {
 
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width: 70
                 height: 30
 
-                radius: 5
+                radius: 2
                 color: root.theme.colors.surface
 
                 Text {

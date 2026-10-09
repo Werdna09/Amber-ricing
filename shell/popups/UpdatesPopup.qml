@@ -195,8 +195,8 @@ PopupWindow {
 
             color:
                 root.updateService.totalCount > 0
-                    ? "#9ca6bd"
-                    : "#9ed06c"
+                    ? root.theme.colors.text
+                    : root.theme.colors.accent
 
             font.family: "JetBrains Mono"
             font.pixelSize: 15
@@ -226,7 +226,7 @@ PopupWindow {
 
                 height: 54
 
-                radius: 7
+                radius: 2
 
                 color: root.theme.colors.surface
 
@@ -265,7 +265,7 @@ PopupWindow {
                     text:
                         root.updateService.repoCount
 
-                    color: "#6dcae8"
+                    color: root.theme.colors.accent
 
                     font.family: "JetBrains Mono"
                     font.pixelSize: 18
@@ -280,7 +280,7 @@ PopupWindow {
 
                 height: 54
 
-                radius: 7
+                radius: 2
 
                 color: root.theme.colors.surface
 
@@ -319,7 +319,7 @@ PopupWindow {
                     text:
                         root.updateService.aurCount
 
-                    color: "#bb97ee"
+                    color: root.theme.colors.accent
 
                     font.family: "JetBrains Mono"
                     font.pixelSize: 18
@@ -354,6 +354,8 @@ PopupWindow {
 
 
         Rectangle {
+            border.width: 1
+            border.color: root.theme.colors.border
             id: refreshButton
 
             anchors {
@@ -367,11 +369,11 @@ PopupWindow {
             width: 82
             height: 26
 
-            radius: 5
+            radius: 2
 
             color:
                 root.checkingDetails
-                    ? "#423f59"
+                    ? root.theme.colors.border
                     : root.theme.colors.surface
 
 
@@ -385,7 +387,7 @@ PopupWindow {
 
                 color:
                     root.checkingDetails
-                        ? "#bb97ee"
+                        ? root.theme.colors.accent
                         : root.theme.colors.text
 
                 font.family: "JetBrains Mono"
@@ -432,12 +434,14 @@ PopupWindow {
 
 
             delegate: Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 required property var modelData
 
                 width: ListView.view.width
                 height: 52
 
-                radius: 6
+                radius: 2
 
                 color:
                     updateMouse.containsMouse
@@ -509,12 +513,12 @@ PopupWindow {
                     width: 42
                     height: 18
 
-                    radius: 4
+                    radius: 2
 
                     color:
                         modelData.source === "AUR"
-                            ? "#423f59"
-                            : "#354157"
+                            ? root.theme.colors.border
+                            : root.theme.colors.surface
 
 
                     Text {
@@ -525,8 +529,8 @@ PopupWindow {
 
                         color:
                             modelData.source === "AUR"
-                                ? "#bb97ee"
-                                : "#6dcae8"
+                                ? root.theme.colors.accent
+                                : root.theme.colors.accent
 
                         font.family: "JetBrains Mono"
                         font.pixelSize: 8
@@ -558,7 +562,7 @@ PopupWindow {
 
             text: "Systém je aktuální ✓"
 
-            color: "#9ed06c"
+            color: root.theme.colors.accent
 
             font.family: "JetBrains Mono"
             font.pixelSize: 11
@@ -583,10 +587,12 @@ PopupWindow {
 
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width: 125
                 height: 34
 
-                radius: 6
+                radius: 2
 
                 color: root.theme.colors.surface
 
@@ -621,18 +627,20 @@ PopupWindow {
 
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width:
                     actionRow.width
                     - 133
 
                 height: 34
 
-                radius: 6
+                radius: 2
 
                 color:
                     root.updateService.totalCount > 0
-                        ? "#9ca6bd"
-                        : "#394634"
+                        ? root.theme.colors.text
+                        : root.theme.colors.surface
 
 
                 Text {
@@ -645,8 +653,8 @@ PopupWindow {
 
                     color:
                         root.updateService.totalCount > 0
-                            ? "#181a1c"
-                            : "#9ed06c"
+                            ? root.theme.colors.background
+                            : root.theme.colors.accent
 
                     font.family: "JetBrains Mono"
                     font.pixelSize: 9

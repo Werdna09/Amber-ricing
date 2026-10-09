@@ -472,6 +472,8 @@ PopupWindow {
          */
 
         Rectangle {
+            border.width: 1
+            border.color: root.theme.colors.border
             id: artworkContainer
 
             anchors {
@@ -485,7 +487,7 @@ PopupWindow {
             width: 110
             height: 110
 
-            radius: 8
+            radius: 2
 
             color: root.theme.colors.surface
 
@@ -517,7 +519,7 @@ PopupWindow {
 
                 text: "♪"
 
-                color: "#bb97ee"
+                color: root.theme.colors.accent
 
                 font.family:
                     "JetBrains Mono"
@@ -579,7 +581,7 @@ PopupWindow {
                 elide:
                     Text.ElideRight
 
-                color: "#bb97ee"
+                color: root.theme.colors.accent
 
                 font.family:
                     "JetBrains Mono"
@@ -614,16 +616,18 @@ PopupWindow {
              */
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width:
                     stateText.width + 16
 
                 height: 24
 
-                radius: 5
+                radius: 2
 
                 color:
                     root.playing
-                        ? "#394634"
+                        ? root.theme.colors.surface
                         : root.theme.colors.surface
 
 
@@ -641,7 +645,7 @@ PopupWindow {
 
                     color:
                         root.playing
-                            ? "#9ed06c"
+                            ? root.theme.colors.accent
                             : root.theme.colors.muted
 
                     font.family:
@@ -675,7 +679,7 @@ PopupWindow {
 
             height: 8
 
-            radius: 4
+            radius: 2
 
             color: root.theme.colors.surface
 
@@ -704,9 +708,9 @@ PopupWindow {
                             )
                         : 0
 
-                radius: 4
+                radius: 2
 
-                color: "#bb97ee"
+                color: root.theme.colors.accent
             }
 
 
@@ -721,7 +725,7 @@ PopupWindow {
                 width: 14
                 height: 14
 
-                radius: 7
+                radius: 2
 
                 anchors.verticalCenter:
                     parent.verticalCenter
@@ -872,15 +876,17 @@ PopupWindow {
              */
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width: 56
                 height: 36
 
-                radius: 6
+                radius: 2
 
                 color:
                     root.canGoPrevious
                         ? root.theme.colors.surface
-                        : "#252630"
+                        : root.theme.colors.background
 
 
                 Text {
@@ -925,14 +931,16 @@ PopupWindow {
              */
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width: 92
                 height: 36
 
-                radius: 6
+                radius: 2
 
                 color:
                     root.hasPlayer
-                        ? "#bb97ee"
+                        ? root.theme.colors.accent
                         : root.theme.colors.surface
 
 
@@ -948,7 +956,7 @@ PopupWindow {
 
                     color:
                         root.hasPlayer
-                            ? "#181a1c"
+                            ? root.theme.colors.background
                             : root.theme.colors.muted
 
                     font.family:
@@ -983,15 +991,17 @@ PopupWindow {
              */
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width: 56
                 height: 36
 
-                radius: 6
+                radius: 2
 
                 color:
                     root.canGoNext
                         ? root.theme.colors.surface
-                        : "#252630"
+                        : root.theme.colors.background
 
 
                 Text {
@@ -1036,15 +1046,17 @@ PopupWindow {
              */
 
             Rectangle {
+                border.width: 1
+                border.color: root.theme.colors.border
                 width: 92
                 height: 36
 
-                radius: 6
+                radius: 2
 
                 color:
                     root.canRaise
-                        ? "#354157"
-                        : "#252630"
+                        ? root.theme.colors.surface
+                        : root.theme.colors.background
 
 
                 Text {
@@ -1054,7 +1066,7 @@ PopupWindow {
 
                     color:
                         root.canRaise
-                            ? "#6dcae8"
+                            ? root.theme.colors.accent
                             : root.theme.colors.muted
 
                     font.family:

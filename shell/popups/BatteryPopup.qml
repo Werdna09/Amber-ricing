@@ -74,11 +74,11 @@ PopupWindow {
         }
 
         if (root.batteryService.charging) {
-            return "#6dcae8"
+            return root.theme.colors.accent
         }
 
         if (root.batteryService.fullyCharged) {
-            return "#9ed06c"
+            return root.theme.colors.accent
         }
 
         if (root.batteryService.percentage <= 15) {
@@ -86,10 +86,10 @@ PopupWindow {
         }
 
         if (root.batteryService.percentage <= 35) {
-            return "#edc763"
+            return root.theme.colors.text
         }
 
-        return "#9ed06c"
+        return root.theme.colors.accent
     }
 
 
@@ -103,10 +103,10 @@ PopupWindow {
         }
 
         if (root.batteryService.percentage <= 35) {
-            return "#edc763"
+            return root.theme.colors.text
         }
 
-        return "#9ed06c"
+        return root.theme.colors.accent
     }
 
 
@@ -189,7 +189,7 @@ PopupWindow {
 
             height: 14
 
-            radius: 7
+            radius: 2
 
             color: root.theme.colors.surface
 
@@ -208,7 +208,7 @@ PopupWindow {
 
                 height: parent.height
 
-                radius: 7
+                radius: 2
 
                 color:
                     root.batteryColor()
@@ -344,9 +344,9 @@ PopupWindow {
                     color:
                         root.batteryService.healthAvailable
                             ? root.batteryService.health >= 80
-                                ? "#9ed06c"
+                                ? root.theme.colors.accent
                                 : root.batteryService.health >= 60
-                                    ? "#edc763"
+                                    ? root.theme.colors.text
                                     : root.theme.colors.accent
                             : root.theme.colors.muted
 
@@ -398,7 +398,7 @@ PopupWindow {
 
                     color:
                         root.batteryService.charging
-                            ? "#6dcae8"
+                            ? root.theme.colors.accent
                             : root.theme.colors.text
 
                     font.family: "JetBrains Mono"
@@ -410,6 +410,8 @@ PopupWindow {
 
 
         Rectangle {
+            border.width: 1
+            border.color: root.theme.colors.border
             anchors {
                 left: parent.left
                 right: parent.right
@@ -422,13 +424,13 @@ PopupWindow {
 
             height: 34
 
-            radius: 6
+            radius: 2
 
             color:
                 root.batteryService.charging
-                    ? "#354157"
+                    ? root.theme.colors.surface
                     : root.batteryService.fullyCharged
-                        ? "#394634"
+                        ? root.theme.colors.surface
                         : root.theme.colors.surface
 
 
@@ -444,9 +446,9 @@ PopupWindow {
 
                 color:
                     root.batteryService.charging
-                        ? "#6dcae8"
+                        ? root.theme.colors.accent
                         : root.batteryService.fullyCharged
-                            ? "#9ed06c"
+                            ? root.theme.colors.accent
                             : root.theme.colors.text
 
                 font.family: "JetBrains Mono"
