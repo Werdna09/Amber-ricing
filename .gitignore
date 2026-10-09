@@ -32,3 +32,5 @@ __pycache__/
 # Runtime files
 *.pid
 
+# Generated from Theme Bank by Amber Alacritty
+config/alacritty/amber-colors.toml

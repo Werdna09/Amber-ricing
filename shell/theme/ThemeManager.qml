@@ -1,4 +1,5 @@
 import QtQuick
+import Quickshell
 import Quickshell.Io
 
 QtObject {
@@ -7,6 +8,11 @@ QtObject {
     // Jediny zdroj barev pro vsechny Amber komponenty.
     property var palettes: []
     property string selectedId: "first-flame"
+    // AMBER_ALACRITTY_SYNC_V1
+    onSelectedIdChanged: {
+        Quickshell.execDetached(["python3", "/home/ondra/Rice/amber/scripts/alacritty/sync_colors.py", "--palette", selectedId])
+    }
+
     readonly property var current: paletteById(selectedId)
     readonly property var colors: current.colors
 
