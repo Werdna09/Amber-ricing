@@ -1,0 +1,153 @@
+/* AMBER · Rofi v1. Generated at launch from Theme Bank selection.
+   Do not edit the generated runtime file; edit this template instead. */
+configuration {
+    modes: [ drun, run ];
+    show-icons: true;
+    terminal: "alacritty";
+    drun-display-format: "{name}";
+    display-drun: "APLIKACE";
+    display-run: "PŘÍKAZY";
+    matching: "fuzzy";
+    sort: true;
+}
+
+* {
+    bg: {{background}};
+    surface: {{surface}};
+    line: {{border}};
+    subtle: {{muted}};
+    ember: {{accent}};
+    fg: {{text}};
+    clear: #00000000;
+    font: "JetBrains Mono 12";
+    background-color: @bg;
+    text-color: @fg;
+}
+
+window {
+    location: center;
+    anchor: center;
+    width: 640px;
+    border: 2px;
+    border-color: @ember;
+    border-radius: 0px;
+    padding: 12px;
+    background-color: @bg;
+}
+
+mainbox {
+    children: [ textbox-header, inputbar, message, listview, mode-switcher ];
+    background-color: @bg;
+    spacing: 10px;
+}
+
+textbox-header {
+    expand: false;
+    content: "✦  AMBER  /  QUICK MENU";
+    background-color: @clear;
+    text-color: @ember;
+    padding: 5px 7px;
+}
+
+message {
+    background-color: @clear;
+    padding: 0px 7px;
+}
+
+textbox {
+    background-color: @clear;
+    text-color: @subtle;
+}
+
+inputbar {
+    children: [ prompt, entry ];
+    spacing: 9px;
+    padding: 11px 13px;
+    background-color: @surface;
+    border: 1px;
+    border-color: @line;
+    border-radius: 0px;
+}
+
+prompt {
+    background-color: @clear;
+    text-color: @ember;
+    padding: 0px;
+}
+
+entry {
+    background-color: @clear;
+    text-color: @fg;
+    placeholder: "Hledat v Amberu…";
+    placeholder-color: @subtle;
+    cursor-color: @ember;
+    padding: 0px;
+}
+
+listview {
+    lines: 7;
+    columns: 1;
+    fixed-height: true;
+    cycle: true;
+    spacing: 3px;
+    padding: 2px;
+    border: 0px;
+    scrollbar: false;
+    background-color: @bg;
+}
+
+element {
+    children: [ element-icon, element-text ];
+    spacing: 11px;
+    padding: 9px 12px;
+    border: 1px;
+    border-color: @clear;
+    border-radius: 0px;
+    background-color: @clear;
+    text-color: @fg;
+}
+
+element normal.normal, element alternate.normal {
+    background-color: @clear;
+    text-color: @fg;
+}
+
+element selected.normal, element selected.active {
+    background-color: @surface;
+    border-color: @ember;
+    text-color: @fg;
+}
+
+element-icon {
+    size: 25px;
+    background-color: @clear;
+}
+
+element-text {
+    vertical-align: 0.5;
+    background-color: @clear;
+    text-color: inherit;
+}
+
+mode-switcher {
+    spacing: 6px;
+    padding: 9px 0px 0px 0px;
+    border: 1px 0px 0px 0px;
+    border-color: @line;
+    background-color: @clear;
+}
+
+button {
+    padding: 6px 10px;
+    border: 1px;
+    border-color: @line;
+    border-radius: 0px;
+    background-color: @clear;
+    text-color: @subtle;
+}
+
+button selected {
+    background-color: @surface;
+    border-color: @ember;
+    text-color: @ember;
+}
