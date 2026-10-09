@@ -230,6 +230,17 @@ PopupWindow {
         }
 
 
+        // Amber Souls details v1 — battery/details separator.
+        Rectangle {
+            anchors.top: batteryTrack.bottom
+            anchors.topMargin: 9
+            anchors.left: batteryTrack.left
+            anchors.right: batteryTrack.right
+            height: 1
+            color: root.theme.colors.border
+            opacity: 0.8
+        }
+
         Column {
             anchors {
                 top: batteryTrack.bottom

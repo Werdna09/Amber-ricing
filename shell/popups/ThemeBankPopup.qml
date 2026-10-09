@@ -66,6 +66,13 @@ PopupWindow {
                             color: root.theme.selectedId === modelData.id ? root.theme.colors.surface : root.theme.colors.background
                             border.width: root.theme.selectedId === modelData.id ? 2 : 1
                             border.color: root.theme.selectedId === modelData.id ? root.theme.colors.accent : root.theme.colors.border
+                            // Amber Souls details v1 — selected palette glows softly.
+                            Rectangle {
+                                anchors.fill: parent
+                                color: root.theme.colors.accent
+                                opacity: root.theme.selectedId === paletteEntry.modelData.id ? 0.10 : 0
+                                radius: 1
+                            }
                             Row {
                                 anchors.fill: parent
                                 anchors.margins: 7

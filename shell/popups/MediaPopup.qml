@@ -664,6 +664,17 @@ PopupWindow {
          * ========================================================
          */
 
+        // Amber Souls details v1 — thin section separator.
+        Rectangle {
+            anchors.top: artworkContainer.bottom
+            anchors.topMargin: 9
+            anchors.left: progressTrack.left
+            anchors.right: progressTrack.right
+            height: 1
+            color: root.theme.colors.border
+            opacity: 0.8
+        }
+
         Rectangle {
             id: progressTrack
 
@@ -677,9 +688,11 @@ PopupWindow {
                 rightMargin: 16
             }
 
-            height: 8
+            height: 5
 
-            radius: 2
+            radius: 0
+            border.width: 1
+            border.color: root.theme.colors.border
 
             color: root.theme.colors.surface
 
@@ -708,7 +721,7 @@ PopupWindow {
                             )
                         : 0
 
-                radius: 2
+                radius: 0
 
                 color: root.theme.colors.accent
             }
@@ -722,10 +735,10 @@ PopupWindow {
                 visible:
                     root.trackLength > 0
 
-                width: 14
-                height: 14
+                width: 8
+                height: 16
 
-                radius: 2
+                radius: 1
 
                 anchors.verticalCenter:
                     parent.verticalCenter
@@ -746,7 +759,9 @@ PopupWindow {
                         )
                         : 0
 
-                color: root.theme.colors.text
+                color: root.theme.colors.accent
+                border.width: 1
+                border.color: root.theme.colors.text
             }
 
 
@@ -877,7 +892,7 @@ PopupWindow {
 
             Rectangle {
                 border.width: 1
-                border.color: root.theme.colors.border
+                border.color: soulsPrevious.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                 width: 56
                 height: 36
 
@@ -888,6 +903,14 @@ PopupWindow {
                         ? root.theme.colors.surface
                         : root.theme.colors.background
 
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 1
+                    color: root.theme.colors.accent
+                    opacity: soulsPrevious.containsMouse ? 0.09 : 0
+                    Behavior on opacity { NumberAnimation { duration: 110 } }
+                }
 
                 Text {
                     anchors.centerIn: parent
@@ -908,7 +931,9 @@ PopupWindow {
 
 
                 MouseArea {
-                    anchors.fill: parent
+                    id: soulsPrevious
+                    hoverEnabled: true
+                  anchors.fill: parent
 
                     enabled:
                         root.canGoPrevious
@@ -932,7 +957,7 @@ PopupWindow {
 
             Rectangle {
                 border.width: 1
-                border.color: root.theme.colors.border
+                border.color: soulsPlay.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                 width: 92
                 height: 36
 
@@ -943,6 +968,14 @@ PopupWindow {
                         ? root.theme.colors.accent
                         : root.theme.colors.surface
 
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 1
+                    color: root.theme.colors.accent
+                    opacity: soulsPlay.containsMouse ? 0.09 : 0
+                    Behavior on opacity { NumberAnimation { duration: 110 } }
+                }
 
                 Text {
                     anchors.centerIn: parent
@@ -968,7 +1001,9 @@ PopupWindow {
 
 
                 MouseArea {
-                    anchors.fill: parent
+                    id: soulsPlay
+                    hoverEnabled: true
+                  anchors.fill: parent
 
                     enabled:
                         root.canTogglePlaying
@@ -992,7 +1027,7 @@ PopupWindow {
 
             Rectangle {
                 border.width: 1
-                border.color: root.theme.colors.border
+                border.color: soulsNext.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                 width: 56
                 height: 36
 
@@ -1003,6 +1038,14 @@ PopupWindow {
                         ? root.theme.colors.surface
                         : root.theme.colors.background
 
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 1
+                    color: root.theme.colors.accent
+                    opacity: soulsNext.containsMouse ? 0.09 : 0
+                    Behavior on opacity { NumberAnimation { duration: 110 } }
+                }
 
                 Text {
                     anchors.centerIn: parent
@@ -1023,7 +1066,9 @@ PopupWindow {
 
 
                 MouseArea {
-                    anchors.fill: parent
+                    id: soulsNext
+                    hoverEnabled: true
+                  anchors.fill: parent
 
                     enabled:
                         root.canGoNext
@@ -1047,7 +1092,7 @@ PopupWindow {
 
             Rectangle {
                 border.width: 1
-                border.color: root.theme.colors.border
+                border.color: soulsOpen.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                 width: 92
                 height: 36
 
@@ -1058,6 +1103,14 @@ PopupWindow {
                         ? root.theme.colors.surface
                         : root.theme.colors.background
 
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 1
+                    color: root.theme.colors.accent
+                    opacity: soulsOpen.containsMouse ? 0.09 : 0
+                    Behavior on opacity { NumberAnimation { duration: 110 } }
+                }
 
                 Text {
                     anchors.centerIn: parent
@@ -1078,7 +1131,9 @@ PopupWindow {
 
 
                 MouseArea {
-                    anchors.fill: parent
+                    id: soulsOpen
+                    hoverEnabled: true
+                  anchors.fill: parent
 
                     enabled:
                         root.canRaise

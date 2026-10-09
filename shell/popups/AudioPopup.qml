@@ -117,6 +117,19 @@ PopupWindow {
         }
 
 
+        // Amber Souls details v1 — thin divider before the volume control.
+        Rectangle {
+            anchors.top: deviceName.bottom
+            anchors.topMargin: 7
+            anchors.left: parent.left
+            anchors.leftMargin: 16
+            anchors.right: parent.right
+            anchors.rightMargin: 16
+            height: 1
+            color: root.theme.colors.border
+            opacity: 0.8
+        }
+
         Rectangle {
             id: volumeTrack
 
@@ -130,9 +143,11 @@ PopupWindow {
                 rightMargin: 16
             }
 
-            height: 8
+            height: 5
 
-            radius: 2
+            radius: 0
+            border.width: 1
+            border.color: root.theme.colors.border
 
             color: root.theme.colors.surface
 
@@ -154,7 +169,7 @@ PopupWindow {
                         )
                     )
 
-                radius: 2
+                radius: 0
 
                 color:
                     root.audioService.muted
@@ -170,10 +185,10 @@ PopupWindow {
 
 
             Rectangle {
-                width: 14
-                height: 14
+                width: 8
+                height: 16
 
-                radius: 2
+                radius: 1
 
                 anchors.verticalCenter:
                     parent.verticalCenter
@@ -190,7 +205,9 @@ PopupWindow {
                         )
                     )
 
-                color: root.theme.colors.text
+                color: root.theme.colors.accent
+                border.width: 1
+                border.color: root.theme.colors.text
 
                 Behavior on x {
                     NumberAnimation {
@@ -267,12 +284,20 @@ PopupWindow {
 
             Rectangle {
                 border.width: 1
-                border.color: root.theme.colors.border
+                border.color: soulsDecrease.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                 width: 70
                 height: 30
 
                 radius: 2
                 color: root.theme.colors.surface
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 1
+                    color: root.theme.colors.accent
+                    opacity: soulsDecrease.containsMouse ? 0.09 : 0
+                    Behavior on opacity { NumberAnimation { duration: 110 } }
+                }
 
                 Text {
                     anchors.centerIn: parent
@@ -287,7 +312,9 @@ PopupWindow {
                 }
 
                 MouseArea {
-                    anchors.fill: parent
+                    id: soulsDecrease
+                    hoverEnabled: true
+                  anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
 
                     onClicked: {
@@ -299,7 +326,7 @@ PopupWindow {
 
             Rectangle {
                 border.width: 1
-                border.color: root.theme.colors.border
+                border.color: soulsMute.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                 width: 122
                 height: 30
 
@@ -309,6 +336,14 @@ PopupWindow {
                     root.audioService.muted
                         ? root.theme.colors.surface
                         : root.theme.colors.surface
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 1
+                    color: root.theme.colors.accent
+                    opacity: soulsMute.containsMouse ? 0.09 : 0
+                    Behavior on opacity { NumberAnimation { duration: 110 } }
+                }
 
                 Text {
                     anchors.centerIn: parent
@@ -329,7 +364,9 @@ PopupWindow {
                 }
 
                 MouseArea {
-                    anchors.fill: parent
+                    id: soulsMute
+                    hoverEnabled: true
+                  anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
 
                     onClicked: {
@@ -341,12 +378,20 @@ PopupWindow {
 
             Rectangle {
                 border.width: 1
-                border.color: root.theme.colors.border
+                border.color: soulsIncrease.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                 width: 70
                 height: 30
 
                 radius: 2
                 color: root.theme.colors.surface
+
+                Rectangle {
+                    anchors.fill: parent
+                    radius: 1
+                    color: root.theme.colors.accent
+                    opacity: soulsIncrease.containsMouse ? 0.09 : 0
+                    Behavior on opacity { NumberAnimation { duration: 110 } }
+                }
 
                 Text {
                     anchors.centerIn: parent
@@ -361,7 +406,9 @@ PopupWindow {
                 }
 
                 MouseArea {
-                    anchors.fill: parent
+                    id: soulsIncrease
+                    hoverEnabled: true
+                  anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
 
                     onClicked: {

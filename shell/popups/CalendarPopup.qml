@@ -65,6 +65,13 @@ PopupWindow {
                     MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: root.monthOffset++ }
                 }
             }
+            // Amber Souls details v1 — separate heading from calendar days.
+            Rectangle {
+                width: parent.width
+                height: 1
+                color: root.theme.colors.border
+                opacity: 0.8
+            }
             Grid {
                 columns: 7
                 spacing: 3

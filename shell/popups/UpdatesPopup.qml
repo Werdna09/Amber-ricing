@@ -329,6 +329,19 @@ PopupWindow {
         }
 
 
+        // Amber Souls details v1 — separate summary from package details.
+        Rectangle {
+            anchors.top: summaryRow.bottom
+            anchors.topMargin: 7
+            anchors.left: parent.left
+            anchors.leftMargin: 16
+            anchors.right: parent.right
+            anchors.rightMargin: 16
+            height: 1
+            color: root.theme.colors.border
+            opacity: 0.8
+        }
+
         Text {
             id: listTitle
 
@@ -435,7 +448,7 @@ PopupWindow {
 
             delegate: Rectangle {
                 border.width: 1
-                border.color: root.theme.colors.border
+                border.color: updateMouse.containsMouse ? root.theme.colors.accent : root.theme.colors.border
                 required property var modelData
 
                 width: ListView.view.width
@@ -443,10 +456,7 @@ PopupWindow {
 
                 radius: 2
 
-                color:
-                    updateMouse.containsMouse
-                        ? root.theme.colors.surface
-                        : "transparent"
+                color: updateMouse.containsMouse ? root.theme.colors.surface : "transparent"
 
 
                 Text {
