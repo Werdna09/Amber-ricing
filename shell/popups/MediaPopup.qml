@@ -210,8 +210,8 @@ PopupWindow {
      * ============================================================
      */
 
-    implicitWidth: 440
-    implicitHeight: 300
+    implicitWidth: 400
+    implicitHeight: 260
 
     color: "transparent"
     grabFocus: true
