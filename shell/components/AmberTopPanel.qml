@@ -213,11 +213,15 @@ Scope {
                     id: rightRow
                     anchors { right: parent.right; rightMargin: 20; verticalCenter: parent.verticalCenter }
                     spacing: 5
+                    // AMBER_PIXEL_ICONS_V1: all icons are 16x16 logical pixels, exported 2x.
+                    // Amber's eight right-side widget actions and popups are unchanged.
                     WidgetButton {
                         id: cpuButton
                         theme: root.theme
                         selected: cpuPopup.visible
-                        label: "CPU " + root.stats.cpuUsage + "% " +
+                        iconName: "cpu"
+                        label: window.compact ? root.stats.cpuUsage + "%" :
+                               root.stats.cpuUsage + "% " +
                                (root.stats.cpuTemp > 0 ? root.stats.cpuTemp + "°" : "—")
                         onActivated: window.togglePopup(cpuPopup)
                     }
@@ -225,42 +229,63 @@ Scope {
                         id: wifiButton
                         theme: root.theme
                         selected: wifiPopup.visible
-                        label: window.compact ? "◉" : (root.network.wifiConnected ? "◉ Wi-Fi" : "○ Wi-Fi")
+                        iconName: !root.network.wifiConnected ? "wifi-off"
+                                : root.network.currentWifi === null ? "wifi-off"
+                                : Number(root.network.currentWifi.signalStrength) >= 0.70 ? "wifi-strong"
+                                : Number(root.network.currentWifi.signalStrength) >= 0.40 ? "wifi-mid"
+                                : "wifi-weak"
+                        label: window.compact ? "" : "Wi-Fi"
                         onActivated: window.togglePopup(wifiPopup)
                     }
                     WidgetButton {
                         id: bluetoothButton
                         theme: root.theme
                         selected: bluetoothPopup.visible
-                        label: root.bluetooth.enabled ? "ᛒ" + (window.compact ? "" : " " + root.bluetooth.connectedCount) : "ᛒ —"
+                        iconName: root.bluetooth.enabled ? "bluetooth-on" : "bluetooth-off"
+                        label: window.compact ? "" :
+                               (root.bluetooth.enabled ? String(root.bluetooth.connectedCount) : "—")
                         onActivated: window.togglePopup(bluetoothPopup)
                     }
                     WidgetButton {
                         id: audioButton
                         theme: root.theme
                         selected: audioPopup.visible
-                        label: root.audio.muted ? "♫ MUTE" : "♫ " + (root.audio.available ? root.audio.volume + "%" : "—")
+                        iconName: root.audio.muted || !root.audio.available ? "audio-mute"
+                                : root.audio.volume <= 33 ? "audio-low"
+                                : root.audio.volume <= 66 ? "audio-mid" : "audio-high"
+                        label: window.compact ? "" :
+                               (root.audio.muted ? "MUTE" :
+                                (root.audio.available ? root.audio.volume + "%" : "—"))
                         onActivated: window.togglePopup(audioPopup)
                     }
                     WidgetButton {
                         id: batteryButton
                         theme: root.theme
                         selected: batteryPopup.visible
-                        label: root.battery.available
-                               ? (root.battery.charging ? "⚡" : "▣ ") + root.battery.percentage + "%"
-                               : "▣ —"
+                        iconName: !root.battery.available ? "battery-empty"
+                                : (root.battery.charging || root.battery.fullyCharged)
+                                  ? "battery-charging"
+                                : root.battery.percentage <= 10 ? "battery-empty"
+                                : root.battery.percentage <= 30 ? "battery-low"
+                                : root.battery.percentage <= 55 ? "battery-mid"
+                                : root.battery.percentage <= 80 ? "battery-high"
+                                : "battery-full"
+                        label: window.compact ? "" :
+                               (root.battery.available ? root.battery.percentage + "%" : "—")
                         onActivated: window.togglePopup(batteryPopup)
                     }
                     WidgetButton {
                         id: updatesButton
                         theme: root.theme
                         selected: updatesPopup.visible
-                        label: "↑ " + root.updates.totalCount
+                        iconName: "updates"
+                        label: window.compact ? "" : String(root.updates.totalCount)
                         onActivated: window.togglePopup(updatesPopup)
                     }
                     WidgetButton {
                         id: keyboardButton
                         theme: root.theme
+                        iconName: "keyboard-lang"
                         label: root.keyboard.displayLabel
                         onActivated: root.keyboard.nextLayout()
                     }
@@ -269,7 +294,8 @@ Scope {
                         id: themeButton
                         theme: root.theme
                         selected: themePopup.visible
-                        label: (window.compact ? "" : "◈ ") + root.theme.current.name + " ▾"
+                        iconName: "theme-bank"
+                        label: window.compact ? "" : root.theme.current.name + " ▾"
                         onActivated: window.togglePopup(themePopup)
                     }
                 }

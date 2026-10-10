@@ -1,18 +1,19 @@
 import QtQuick
 import "chrome"
 
-// API preserved: theme, label, selected, paddingX, activated().
+// AMBER_PIXEL_ICONS_V1: preserve WidgetButton signals, colors, hover, and label API.
 Rectangle {
     id: root
     required property var theme
     property string label: ""
+    property string iconName: ""
     property bool selected: false
-    property int paddingX: 10
+    property int paddingX: 8
     signal activated()
 
     readonly property bool hovered: hit.containsMouse
-    implicitWidth: caption.implicitWidth + paddingX * 2
-    implicitHeight: 32
+    implicitWidth: content.implicitWidth + paddingX * 2
+    implicitHeight: 36
     radius: 1
     color: root.selected ? root.theme.colors.surface
           : Qt.darker(root.theme.colors.background, 1.35)
@@ -28,15 +29,33 @@ Rectangle {
         selected: root.selected
     }
 
-    Text {
-        id: caption
+    Row {
+        id: content
         anchors.centerIn: parent
-        text: root.label
-        color: root.theme.colors.text
-        font.family: "JetBrains Mono"
-        font.pixelSize: 11
-        font.bold: root.selected
-        renderType: Text.QtRendering
+        spacing: root.iconName !== "" && root.label !== "" ? 5 : 0
+        Image {
+            width: 32
+            height: 32
+            visible: root.iconName !== ""
+            source: root.iconName !== ""
+                    ? Qt.resolvedUrl("../assets/icons/" + root.iconName + ".png") : ""
+            fillMode: Image.PreserveAspectFit
+            smooth: false
+            mipmap: false
+            asynchronous: false
+        }
+        Text {
+            id: caption
+            height: 32
+            visible: root.label !== ""
+            verticalAlignment: Text.AlignVCenter
+            text: root.label
+            color: root.theme.colors.text
+            font.family: "JetBrains Mono"
+            font.pixelSize: 11
+            font.bold: root.selected
+            renderType: Text.QtRendering
+        }
     }
 
     MouseArea {
