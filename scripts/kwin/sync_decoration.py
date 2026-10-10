@@ -109,6 +109,18 @@ def frame_svg(c: dict) -> str:
                     rect(edge-2,0,2,bot,steel),rect(edge-4,0,2,bot,metal),
                     rect(0,bot-2,edge,2,steel),rect(0,bot-4,edge-2,2,metal),
                     rect(edge-12,bot-8,7,2,ember)])
+    # AMBER_MAXIMIZED_OPAQUE_CENTER_V1
+    # Aurorae uses the center tile as the maximized titlebar background.
+    # Keep the normal center transparent for unmaximized window content.
+    for maximized_id, offset, face in (
+        ("decoration-maximized-center", 0, c['background']),
+        ("decoration-maximized-inactive-center", one + 12,
+         mix(c['background'], c['surface'], .35)),
+    ):
+        chunk.append(
+            f'<g id="{maximized_id}" transform="translate({offset + tw},{top})">'
+            + rect(0, 0, mw, mid, face) + '</g>'
+        )
     return svg_open(2*one+12,top+mid+bot)+'\n'+ '\n'.join(chunk) + '\n</svg>\n'
 
 
