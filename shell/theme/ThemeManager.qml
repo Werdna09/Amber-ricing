@@ -11,6 +11,7 @@ QtObject {
     // AMBER_ALACRITTY_SYNC_V1
     onSelectedIdChanged: {
         Quickshell.execDetached(["python3", "/home/ondra/Rice/amber/scripts/alacritty/sync_colors.py", "--palette", selectedId])
+        manager.applyWallpaper(selectedId)
     }
 
     readonly property var current: paletteById(selectedId)
@@ -39,6 +40,16 @@ QtObject {
         selection.writeAdapter()
     }
 
+    // AMBER_WALLPAPER_SYNC_V1
+    // Project-relative path: works even when the whole Amber repo is moved.
+    function applyWallpaper(id) {
+        Quickshell.execDetached([
+            "python3",
+            Quickshell.shellDir + "/../scripts/wallpapers/apply_wallpaper.py",
+            "--palette", id
+        ])
+    }
+
     property FileView bank: FileView {
         path: Qt.resolvedUrl("palettes.json")
         blockLoading: true
@@ -52,6 +63,11 @@ QtObject {
         path: Qt.resolvedUrl("selection.json")
         blockLoading: true
         adapter: JsonAdapter { property string selected: "first-flame" }
-        onLoaded: manager.selectedId = adapter.selected
+        onLoaded: {
+            if (manager.selectedId === adapter.selected)
+                manager.applyWallpaper(adapter.selected)
+            else
+                manager.selectedId = adapter.selected
+        }
     }
 }

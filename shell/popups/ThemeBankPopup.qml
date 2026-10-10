@@ -76,9 +76,19 @@ PopupWindow {
                                 anchors.fill: parent
                                 anchors.margins: 7
                                 spacing: 5
+                                // AMBER_THEME_POWER_V1: theme emblem + full readable name.
+                                Image {
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: 30
+                                    height: 30
+                                    source: Qt.resolvedUrl("../assets/theme-icons/" + paletteEntry.modelData.id + ".png")
+                                    fillMode: Image.PreserveAspectFit
+                                    smooth: false
+                                    mipmap: false
+                                }
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
-                                    width: 176
+                                    width: 140
                                     text: paletteEntry.modelData.name
                                     elide: Text.ElideRight
                                     font.family: "JetBrains Mono"

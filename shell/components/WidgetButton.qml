@@ -7,6 +7,8 @@ Rectangle {
     required property var theme
     property string label: ""
     property string iconName: ""
+    // AMBER_THEME_POWER_V1: optional second sprite beside the existing Tome.
+    property string secondaryIconName: ""
     property bool selected: false
     property int paddingX: 8
     signal activated()
@@ -32,13 +34,24 @@ Rectangle {
     Row {
         id: content
         anchors.centerIn: parent
-        spacing: root.iconName !== "" && root.label !== "" ? 5 : 0
+        spacing: root.iconName !== "" && (root.label !== "" || root.secondaryIconName !== "") ? 5 : 0
         Image {
             width: 32
             height: 32
             visible: root.iconName !== ""
             source: root.iconName !== ""
                     ? Qt.resolvedUrl("../assets/icons/" + root.iconName + ".png") : ""
+            fillMode: Image.PreserveAspectFit
+            smooth: false
+            mipmap: false
+            asynchronous: false
+        }
+        Image {
+            width: 32
+            height: 32
+            visible: root.secondaryIconName !== ""
+            source: root.secondaryIconName !== ""
+                    ? Qt.resolvedUrl("../assets/theme-icons/" + root.secondaryIconName + ".png") : ""
             fillMode: Image.PreserveAspectFit
             smooth: false
             mipmap: false

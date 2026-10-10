@@ -39,6 +39,7 @@ Scope {
                 batteryPopup.visible = false
                 updatesPopup.visible = false
                 mediaPopup.visible = false
+                powerPopup.visible = false
             }
             function togglePopup(p) {
                 const shouldOpen = !p.visible;
@@ -295,8 +296,18 @@ Scope {
                         theme: root.theme
                         selected: themePopup.visible
                         iconName: "theme-bank"
-                        label: window.compact ? "" : root.theme.current.name + " ▾"
+                        // AMBER_THEME_POWER_V1: Tome + icon of the active palette, no text.
+                        secondaryIconName: root.theme.selectedId
+                        label: ""
                         onActivated: window.togglePopup(themePopup)
+                    }
+                    WidgetButton {
+                        id: powerButton
+                        theme: root.theme
+                        selected: powerPopup.visible
+                        iconName: "power"
+                        label: ""
+                        onActivated: window.togglePopup(powerPopup)
                     }
                 }
 
@@ -339,6 +350,8 @@ Scope {
                     visible: false
                 }
                 ThemeBankPopup { id: themePopup; anchorItem: themeButton; theme: root.theme; visible: false }
+                // AMBER_THEME_POWER_V1: always immediately to the right of Theme Bank.
+                PowerPopup { id: powerPopup; anchorItem: powerButton; theme: root.theme; visible: false }
                 AudioPopup { id: audioPopup; theme: root.theme; anchorItem: audioButton; audioService: root.audio; visible: false }
                 WifiPopup { id: wifiPopup; theme: root.theme; anchorItem: wifiButton; networkService: root.network; visible: false }
                 BluetoothPopup { id: bluetoothPopup; theme: root.theme; anchorItem: bluetoothButton; bluetoothService: root.bluetooth; visible: false }
