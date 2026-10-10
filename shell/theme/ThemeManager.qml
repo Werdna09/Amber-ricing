@@ -10,8 +10,12 @@ QtObject {
     property string selectedId: "first-flame"
     // AMBER_ALACRITTY_SYNC_V1
     onSelectedIdChanged: {
+        // AMBER_LOTHRIC_STEEL_V1
+        Quickshell.execDetached(["python3", Quickshell.shellDir + "/../scripts/kwin/sync_decoration.py", "--palette", selectedId])
+
         Quickshell.execDetached(["python3", "/home/ondra/Rice/amber/scripts/alacritty/sync_colors.py", "--palette", selectedId])
         manager.applyWallpaper(selectedId)
+        manager.applyKdeColors(selectedId)
     }
 
     readonly property var current: paletteById(selectedId)
@@ -30,6 +34,15 @@ QtObject {
                 accent: "#DAA45C", text: "#E8D4B2"
             }
         }
+    }
+
+    // AMBER_KDE_COLOR_SYNC_V1: mirrors selected palette to KDE app colors.
+    function applyKdeColors(id) {
+        Quickshell.execDetached([
+            "python3",
+            Quickshell.shellDir + "/../scripts/kde/sync_colors.py",
+            "--apply", id
+        ])
     }
 
     function selectPalette(id) {
@@ -64,10 +77,12 @@ QtObject {
         blockLoading: true
         adapter: JsonAdapter { property string selected: "first-flame" }
         onLoaded: {
-            if (manager.selectedId === adapter.selected)
+            if (manager.selectedId === adapter.selected) {
                 manager.applyWallpaper(adapter.selected)
-            else
+                manager.applyKdeColors(adapter.selected)
+            } else {
                 manager.selectedId = adapter.selected
+            }
         }
     }
 }
