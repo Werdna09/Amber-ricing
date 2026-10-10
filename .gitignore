@@ -37,3 +37,5 @@ config/alacritty/amber-colors.toml
 
 # Local fish config snapshot; may contain private variables
 config/fish/
+
+/notes.tex
