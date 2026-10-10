@@ -15,6 +15,7 @@ ShellRoot {
     BatteryStatus { id: battery }
     UpdateStatus { id: updates }
     MediaStatus { id: media }
+    BonfireNotifications { id: notifications }
     KeyboardStatus { id: keyboard }
     WindowStatus { id: windows }
 
@@ -29,6 +30,7 @@ ShellRoot {
         updates: updates
         media: media
         keyboard: keyboard
+        notifications: notifications
     }
     // Amber Dock v1 — independent of the existing top panel.
     AmberDock {

@@ -16,6 +16,7 @@ Scope {
     required property var updates
     required property var media
     required property var keyboard
+    required property var notifications
 
     Variants {
         model: Quickshell.screens
@@ -31,6 +32,7 @@ Scope {
             readonly property bool compact: width < 1600
             function closePopups() {
                 themePopup.visible = false
+                notificationPopup.visible = false
                 clockPopup.visible = false
                 cpuPopup.visible = false
                 audioPopup.visible = false
@@ -58,9 +60,34 @@ Scope {
                     id: leftRow
                     anchors { left: parent.left; leftMargin: 22; verticalCenter: parent.verticalCenter }
                     spacing: 8
-                    BonfireMark {
+                    Item {
+                        id: bonfireButton
+                        width: 40; height: 40
                         anchors.verticalCenter: parent.verticalCenter
-                        theme: root.theme
+                        BonfireMark {
+                            anchors.centerIn: parent
+                            theme: root.theme
+                        }
+                        Rectangle {
+                            visible: root.notifications.unreadCount > 0
+                            width: 18; height: 18; radius: 1
+                            x: parent.width - width; y: -1
+                            color: root.theme.colors.accent
+                            border.width: 1
+                            border.color: root.theme.colors.background
+                            Text {
+                                anchors.centerIn: parent
+                                text: Math.min(99, root.notifications.unreadCount)
+                                color: root.theme.colors.background
+                                font.family: "JetBrains Mono"; font.pixelSize: 10; font.bold: true
+                            }
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: true
+                            onClicked: window.togglePopup(notificationPopup)
+                        }
                     }
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
@@ -348,6 +375,19 @@ Scope {
                     theme: root.theme
                     clockService: clock
                     visible: false
+                }
+                BonfireCenterPopup {
+                    id: notificationPopup
+                    anchorItem: bonfireButton
+                    theme: root.theme
+                    notifications: root.notifications
+                    visible: false
+                }
+                BonfireToast {
+                    id: notificationToast
+                    anchorItem: powerButton
+                    theme: root.theme
+                    notifications: root.notifications
                 }
                 ThemeBankPopup { id: themePopup; anchorItem: themeButton; theme: root.theme; visible: false }
                 // AMBER_THEME_POWER_V1: always immediately to the right of Theme Bank.
