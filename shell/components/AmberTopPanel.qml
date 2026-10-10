@@ -300,6 +300,37 @@ Scope {
                     }
                 }
 
+                // AMBER_ONION_POSITION_HOTFIX_V1: overlap to the LEFT of CPU, without affecting widget widths.
+                // This Image-only companion handles no mouse input.
+                OnionKnightCompanion {
+                    id: onionKnight
+                    theme: root.theme
+                    awake: Number(root.stats.cpuUsage) >= 10
+                    anchors.right: rightRow.left
+                    anchors.rightMargin: 4
+                    anchors.bottom: parent.bottom
+                    width: 56
+                    height: 62
+                    z: 5
+                    // Hide if there is no gap between clock and CPU.
+                    visible: rightRow.x - (clockButton.x + clockButton.width) >= width + 16
+                }
+
+                // AMBER_SOLAIRE_V1: occasional noninteractive pixel-art visitor.
+                // Stays out of rightRow; no impact on any status widget or popup.
+                SolaireJourney {
+                    id: solaireJourney
+                    anchors.fill: parent
+                    z: 7
+                    enabled: window.width >= 1180
+                             && clockButton.x - (leftRow.x + leftRow.width) >= 120
+                    // AMBER_SOLAIRE_POSITION_HOTFIX_V1
+                    // Travel only in the empty corridor between Now Playing and clock.
+                    // Anchored to leftRow's real width so the media title cannot collide.
+                    journeyStart: leftRow.x + leftRow.width + 12
+                    journeyEnd: Math.min(clockButton.x - 32 - 22, journeyStart + 225)
+                }
+
                 CalendarPopup {
                     id: clockPopup
                     anchorItem: clockButton
